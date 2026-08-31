@@ -105,10 +105,18 @@ export default function App() {
           onChange={setSelectedMonthId}
         />
         <nav className="app-nav" aria-label="Primary">
-          <a href="/" onClick={(event) => navigate(event, '/')}>
+          <a
+            href="/"
+            aria-current={!isDashboard ? 'page' : undefined}
+            onClick={(event) => navigate(event, '/')}
+          >
             Board
           </a>
-          <a href="/dashboard" onClick={(event) => navigate(event, '/dashboard')}>
+          <a
+            href="/dashboard"
+            aria-current={isDashboard ? 'page' : undefined}
+            onClick={(event) => navigate(event, '/dashboard')}
+          >
             Dashboard
           </a>
         </nav>

@@ -45,6 +45,25 @@ body {
 .app-nav a {
   color: #2d1b4e;
   font-weight: 600;
+  text-decoration: none;
+}
+
+.app-nav a[aria-current='page'] {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.dashboard {
+  padding: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.dashboard section {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1rem;
+  border: 1px solid #ddd8e6;
 }
 
 .month-switcher,
