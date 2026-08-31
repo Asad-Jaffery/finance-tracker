@@ -3,11 +3,15 @@
   line-height: 1.5;
   font-weight: 400;
   color: #08060d;
-  background-color: #fff;
+  background-color: #f6f4f8;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
@@ -15,6 +19,127 @@ body {
   min-height: 100vh;
 }
 
+.app-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  padding: 0.75rem 1rem;
+  background: #fff;
+  border-bottom: 1px solid #ddd8e6;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.app-nav {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.app-nav a {
+  color: #2d1b4e;
+  font-weight: 600;
+}
+
+.month-switcher,
+.merchant-search {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.month-switcher select,
+.merchant-search input {
+  font: inherit;
+  padding: 0.25rem 0.4rem;
+}
+
 main {
-  padding: 2rem;
+  padding: 1rem;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(220px, 1fr));
+  gap: 0.75rem;
+  overflow-x: auto;
+  align-items: start;
+  min-height: calc(100vh - 8rem);
+}
+
+.column {
+  background: #ece7f3;
+  border-radius: 8px;
+  min-width: 220px;
+  max-height: calc(100vh - 8rem);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.column-header {
+  padding: 0.65rem 0.75rem 0.5rem;
+  background: #e0d8ee;
+  border-bottom: 1px solid #cfc4e0;
+}
+
+.column-name {
+  margin: 0 0 0.2rem;
+  font-size: 0.92rem;
+  line-height: 1.25;
+}
+
+.column-count,
+.column-total {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.column-cards {
+  padding: 0.5rem;
+  overflow-y: auto;
+  min-height: 4rem;
+}
+
+.card {
+  background: #fff;
+  border-radius: 6px;
+  padding: 0.55rem 0.65rem;
+  margin-bottom: 0.5rem;
+  box-shadow: 0 1px 2px rgb(0 0 0 / 8%);
+}
+
+.card-refund {
+  background: #f3eef8;
+  border-left: 3px solid #6b4ea0;
+  opacity: 0.88;
+}
+
+.card-merchant {
+  margin: 0 0 0.2rem;
+  font-size: 0.92rem;
+}
+
+.card-amount,
+.card-date {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.card-issuer {
+  display: inline-block;
+  margin-top: 0.3rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: 999px;
+  background: #2d1b4e;
+  color: #fff;
+  font-size: 0.72rem;
+  text-transform: lowercase;
 }
