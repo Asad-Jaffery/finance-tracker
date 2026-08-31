@@ -4,6 +4,7 @@ import { Board } from './components/Board.tsx'
 import { Dashboard } from './components/Dashboard.tsx'
 import { MerchantSearch } from './components/MerchantSearch.tsx'
 import { MonthSwitcher } from './components/MonthSwitcher.tsx'
+import { filterByMerchantSearch } from './search.ts'
 import type { MerchantMap, MonthFile } from './types.ts'
 
 function currentPath(): string {
@@ -87,16 +88,12 @@ export default function App() {
   }
 
   const isDashboard = path === '/dashboard'
-  const query = search.trim().toLowerCase()
   const visibleMonth =
     selectedMonth?.month === selectedMonthId ? selectedMonth : null
-  const transactions = (visibleMonth?.transactions ?? []).filter((tx) => {
-    if (!query) return true
-    return (
-      tx.cleanedMerchant.toLowerCase().includes(query) ||
-      tx.rawMerchant.toLowerCase().includes(query)
-    )
-  })
+  const transactions = filterByMerchantSearch(
+    visibleMonth?.transactions ?? [],
+    search,
+  )
 
   return (
     <div className="app">
