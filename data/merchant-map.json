@@ -1,0 +1,21 @@
+{
+  "CHIPOTLE": { "category": "Food + coffee", "source": "llm" },
+  "UBER": { "category": "Transit", "source": "llm" },
+  "UBER EATS": { "category": "Food + coffee", "source": "llm" },
+  "STARBUCKS": { "category": "Food + coffee", "source": "llm" },
+  "BLUE BOTTLE COFFEE": { "category": "Food + coffee", "source": "llm" },
+  "WHOLE FOODS": { "category": "Groceries", "source": "llm" },
+  "TRADER JOE'S": { "category": "Groceries", "source": "llm" },
+  "SHELL OIL": { "category": "Gas", "source": "llm" },
+  "LYFT": { "category": "Transit", "source": "llm" },
+  "UNITED AIRLINES": { "category": "Travel", "source": "llm" },
+  "AIRBNB": { "category": "Travel", "source": "llm" },
+  "AMAZON.COM": { "category": "Shopping", "source": "llm" },
+  "TARGET": { "category": "Shopping", "source": "llm" },
+  "24 HOUR FITNESS": { "category": "Subscriptions", "source": "llm" },
+  "NETFLIX": { "category": "Subscriptions", "source": "llm" },
+  "SPOTIFY": { "category": "Subscriptions", "source": "llm" },
+  "AMC THEATRES": { "category": "Entertainment", "source": "llm" },
+  "ATM FEE": { "category": "Other / uncategorized", "source": "llm" },
+  "UNKNOWN MERCHANT XYZ": { "category": "Other / uncategorized", "source": "human" }
+}

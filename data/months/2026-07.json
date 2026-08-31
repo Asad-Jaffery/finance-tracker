@@ -1,0 +1,97 @@
+{
+  "month": "2026-07",
+  "generatedAt": "2026-07-31T12:00:00.000Z",
+  "issuers": ["amex", "chase"],
+  "transactions": [
+    {
+      "date": "2026-07-01",
+      "amount": 15.99,
+      "rawMerchant": "NETFLIX.COM",
+      "cleanedMerchant": "NETFLIX",
+      "issuer": "amex",
+      "kind": "purchase",
+      "category": "Subscriptions"
+    },
+    {
+      "date": "2026-07-03",
+      "amount": 13.1,
+      "rawMerchant": "CHIPOTLE #1823 SF",
+      "cleanedMerchant": "CHIPOTLE",
+      "issuer": "amex",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-07-05",
+      "amount": 64.2,
+      "rawMerchant": "WHOLE FOODS #102",
+      "cleanedMerchant": "WHOLE FOODS",
+      "issuer": "amex",
+      "kind": "purchase",
+      "category": "Groceries"
+    },
+    {
+      "date": "2026-07-08",
+      "amount": 5.75,
+      "rawMerchant": "STARBUCKS",
+      "cleanedMerchant": "STARBUCKS",
+      "issuer": "chase",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-07-10",
+      "amount": 41.0,
+      "rawMerchant": "SHELL OIL 12345678",
+      "cleanedMerchant": "SHELL OIL",
+      "issuer": "amex",
+      "kind": "purchase",
+      "category": "Gas"
+    },
+    {
+      "date": "2026-07-12",
+      "amount": 22.5,
+      "rawMerchant": "UBER *TRIP",
+      "cleanedMerchant": "UBER",
+      "issuer": "chase",
+      "kind": "purchase",
+      "category": "Transit"
+    },
+    {
+      "date": "2026-07-15",
+      "amount": 29.99,
+      "rawMerchant": "AMAZON.COM*AMZN.COM/BILL",
+      "cleanedMerchant": "AMAZON.COM",
+      "issuer": "chase",
+      "kind": "purchase",
+      "category": "Shopping"
+    },
+    {
+      "date": "2026-07-18",
+      "amount": 38.4,
+      "rawMerchant": "TRADER JOE'S",
+      "cleanedMerchant": "TRADER JOE'S",
+      "issuer": "chase",
+      "kind": "purchase",
+      "category": "Groceries"
+    },
+    {
+      "date": "2026-07-20",
+      "amount": 16.5,
+      "rawMerchant": "AMC THEATRES",
+      "cleanedMerchant": "AMC THEATRES",
+      "issuer": "chase",
+      "kind": "purchase",
+      "category": "Entertainment"
+    },
+    {
+      "date": "2026-07-25",
+      "amount": 3.5,
+      "rawMerchant": "ATM FEE 1234",
+      "cleanedMerchant": "ATM FEE",
+      "issuer": "amex",
+      "kind": "purchase",
+      "category": "Other / uncategorized"
+    }
+  ]
+}
