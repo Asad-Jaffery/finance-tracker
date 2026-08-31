@@ -59,13 +59,23 @@ export default function App() {
 
   useEffect(() => {
     if (!selectedMonthId) return
+    const requested = selectedMonthId
+    let cancelled = false
     void (async () => {
       try {
-        setSelectedMonth(await fetchMonth(selectedMonthId))
+        const file = await fetchMonth(requested)
+        if (!cancelled) {
+          setSelectedMonth(file)
+        }
       } catch {
-        setSelectedMonth(null)
+        if (!cancelled) {
+          setSelectedMonth(null)
+        }
       }
     })()
+    return () => {
+      cancelled = true
+    }
   }, [selectedMonthId])
 
   function navigate(event: MouseEvent<HTMLAnchorElement>, to: string) {
@@ -78,7 +88,9 @@ export default function App() {
 
   const isDashboard = path === '/dashboard'
   const query = search.trim().toLowerCase()
-  const transactions = (selectedMonth?.transactions ?? []).filter((tx) => {
+  const visibleMonth =
+    selectedMonth?.month === selectedMonthId ? selectedMonth : null
+  const transactions = (visibleMonth?.transactions ?? []).filter((tx) => {
     if (!query) return true
     return (
       tx.cleanedMerchant.toLowerCase().includes(query) ||
@@ -119,9 +131,9 @@ export default function App() {
           <p data-testid="merchant-map-count" hidden>
             {Object.keys(merchantMap).length}
           </p>
-          {selectedMonth ? (
+          {visibleMonth ? (
             <p data-testid="selected-month" hidden>
-              {selectedMonth.month}
+              {visibleMonth.month}
             </p>
           ) : null}
         </main>
