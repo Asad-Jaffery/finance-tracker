@@ -20,12 +20,14 @@ import {
 import type { Transaction } from '../types.ts'
 
 export function Dashboard({
+  month,
   categories,
   transactions,
   previousTransactions,
   previousKnown,
   trend,
 }: {
+  month: string
   categories: string[]
   transactions: Transaction[]
   previousTransactions: Transaction[] | null
@@ -39,8 +41,13 @@ export function Dashboard({
   const isEmpty = transactions.length === 0
 
   return (
-    <main className="dashboard" data-testid="dashboard">
+    <main className="dashboard" data-testid="dashboard" data-month={month}>
       <h2>Dashboard</h2>
+      {month ? (
+        <p data-testid="dashboard-month" hidden>
+          {month}
+        </p>
+      ) : null}
       <section data-testid="dashboard-category-totals">
         <h3>Category totals</h3>
         {isEmpty ? <p>no transactions</p> : null}

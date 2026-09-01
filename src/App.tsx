@@ -222,9 +222,15 @@ export default function App() {
             Dashboard
           </a>
         </nav>
+        {selectedMonthId ? (
+          <p data-testid="selected-month" hidden>
+            {selectedMonthId}
+          </p>
+        ) : null}
       </header>
       {isDashboard ? (
         <Dashboard
+          month={selectedMonthId}
           categories={categories}
           transactions={visibleMonth?.transactions ?? []}
           previousKnown={hasPreviousMonth !== null}
@@ -258,11 +264,6 @@ export default function App() {
           <p data-testid="merchant-map-count" hidden>
             {Object.keys(merchantMap).length}
           </p>
-          {visibleMonth ? (
-            <p data-testid="selected-month" hidden>
-              {visibleMonth.month}
-            </p>
-          ) : null}
         </main>
       )}
     </div>
