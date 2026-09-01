@@ -29,14 +29,19 @@ async function withDataRoot(): Promise<{ root: string; cleanup: () => Promise<vo
   }
 }
 
-function rawGet(origin: URL, pathname: string): Promise<{ status: number; body: string }> {
+function rawRequest(
+  origin: URL,
+  pathname: string,
+  options: { method?: string; body?: string; headers?: Record<string, string> } = {},
+): Promise<{ status: number; body: string }> {
   return new Promise((resolve, reject) => {
     const req = httpRequest(
       {
         hostname: origin.hostname,
         port: origin.port,
         path: pathname,
-        method: 'GET',
+        method: options.method ?? 'GET',
+        headers: options.headers,
       },
       (res) => {
         const chunks: Buffer[] = []
@@ -50,8 +55,13 @@ function rawGet(origin: URL, pathname: string): Promise<{ status: number; body: 
       },
     )
     req.on('error', reject)
+    if (options.body !== undefined) req.write(options.body)
     req.end()
   })
+}
+
+function rawGet(origin: URL, pathname: string): Promise<{ status: number; body: string }> {
+  return rawRequest(origin, pathname)
 }
 
 async function listen(root: string): Promise<{ url: string; close: () => Promise<void> }> {
@@ -226,5 +236,101 @@ describe('local data read API', () => {
     const found = await fetch(`${server.url}/api/categories`)
     expect(found.status).toBe(200)
     expect(await found.json()).toEqual(categories)
+  })
+})
+
+describe('local data write API', () => {
+  let cleanup: (() => Promise<void>) | undefined
+  let close: (() => Promise<void>) | undefined
+
+  afterEach(async () => {
+    if (close) await close()
+    if (cleanup) await cleanup()
+    close = undefined
+    cleanup = undefined
+  })
+
+  it('PUT then GET roundtrips month and merchant-map JSON', async () => {
+    const data = await withDataRoot()
+    cleanup = data.cleanup
+    const server = await listen(data.root)
+    close = server.close
+
+    const missing = await fetch(`${server.url}/api/months/2019-01`)
+    expect(missing.status).toBe(404)
+
+    const month = {
+      month: '2019-01',
+      generatedAt: '2019-01-31T00:00:00.000Z',
+      issuers: ['amex'],
+      transactions: [],
+    }
+    const putMonth = await fetch(`${server.url}/api/months/2019-01`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(month),
+    })
+    expect(putMonth.status).toBe(200)
+    expect(await putMonth.json()).toEqual(month)
+
+    const gotMonth = await fetch(`${server.url}/api/months/2019-01`)
+    expect(gotMonth.status).toBe(200)
+    expect(await gotMonth.json()).toEqual(month)
+
+    const map = { CHIPOTLE: { category: 'Shopping', source: 'human' } }
+    const putMap = await fetch(`${server.url}/api/merchant-map`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(map),
+    })
+    expect(putMap.status).toBe(200)
+    expect(await fetch(`${server.url}/api/merchant-map`).then((r) => r.json())).toEqual(map)
+  })
+
+  it('rejects traversal and non-JSON writes without changing disk', async () => {
+    const data = await withDataRoot()
+    cleanup = data.cleanup
+    const existingMap = { UBER: { category: 'Transit', source: 'llm' } }
+    await writeFile(
+      path.join(data.root, 'data', 'months', '2026-08.json'),
+      JSON.stringify(SAMPLE_MONTH),
+    )
+    await writeFile(path.join(data.root, 'data', 'merchant-map.json'), JSON.stringify(existingMap))
+    const server = await listen(data.root)
+    close = server.close
+    const origin = new URL(server.url)
+
+    const traversal = await rawRequest(origin, '/api/months/../merchant-map', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ month: 'hacked' }),
+    })
+    expect(traversal.status).toBe(400)
+
+    const encoded = await rawRequest(origin, '/api/months/%2e%2e/merchant-map', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ month: 'hacked' }),
+    })
+    expect(encoded.status).toBe(400)
+
+    const notJson = await fetch(`${server.url}/api/months/2026-08`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'text/plain' },
+      body: 'not-json',
+    })
+    expect(notJson.status).toBe(400)
+
+    const arrayMap = await fetch(`${server.url}/api/merchant-map`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: '[]',
+    })
+    expect(arrayMap.status).toBe(400)
+
+    expect(await fetch(`${server.url}/api/months/2026-08`).then((r) => r.json())).toEqual(
+      SAMPLE_MONTH,
+    )
+    expect(await fetch(`${server.url}/api/merchant-map`).then((r) => r.json())).toEqual(existingMap)
   })
 })
