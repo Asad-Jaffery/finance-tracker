@@ -108,3 +108,22 @@ export function formatSignedDelta(delta: number): string {
   if (delta > 0) return `+${formatUsd(delta)}`
   return formatUsd(delta)
 }
+
+export interface TrendPoint {
+  month: string
+  total: number
+}
+
+/**
+ * One total-spend point per on-disk month (API order).
+ * y = signed grand total of that month’s transactions, including refunds and $0 empty files.
+ */
+export function trendPoints(
+  months: string[],
+  transactionsByMonth: Record<string, Transaction[] | undefined>,
+): TrendPoint[] {
+  return months.map((month) => ({
+    month,
+    total: columnTotal(transactionsByMonth[month] ?? []),
+  }))
+}

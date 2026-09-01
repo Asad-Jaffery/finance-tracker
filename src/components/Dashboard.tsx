@@ -3,6 +3,8 @@ import {
   BarChart,
   CartesianGrid,
   LabelList,
+  Line,
+  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -13,6 +15,7 @@ import {
   formatSignedDelta,
   formatUsd,
   vsLastMonth,
+  type TrendPoint,
 } from '../totals.ts'
 import type { Transaction } from '../types.ts'
 
@@ -21,11 +24,13 @@ export function Dashboard({
   transactions,
   previousTransactions,
   previousKnown,
+  trend,
 }: {
   categories: string[]
   transactions: Transaction[]
   previousTransactions: Transaction[] | null
   previousKnown: boolean
+  trend: TrendPoint[]
 }) {
   const totals = categoryTotals(categories, transactions)
   const comparison = previousKnown
@@ -128,7 +133,42 @@ export function Dashboard({
       </section>
       <section data-testid="dashboard-trend">
         <h3>Trend</h3>
-        <p>No transactions</p>
+        <div className="dashboard-chart" data-testid="trend-chart">
+          <ResponsiveContainer width="100%" height={360}>
+            <LineChart
+              data={trend}
+              margin={{ top: 8, right: 24, bottom: 8, left: 16 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" interval={0} />
+              <YAxis tickFormatter={(value: number) => formatUsd(value)} />
+              <Tooltip
+                formatter={(value) => formatUsd(Number(value ?? 0))}
+                labelFormatter={(label) => String(label)}
+              />
+              <Line
+                type="linear"
+                dataKey="total"
+                name="Total spend"
+                stroke="#6b4ea0"
+                strokeWidth={2}
+                dot={{ r: 4 }}
+                isAnimationActive={false}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+        <ul className="category-total-list" data-testid="trend-point-list">
+          {trend.map((row) => (
+            <li
+              key={row.month}
+              data-month={row.month}
+              data-total={String(row.total)}
+            >
+              {row.month}: {formatUsd(row.total)}
+            </li>
+          ))}
+        </ul>
       </section>
     </main>
   )

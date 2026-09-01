@@ -13,8 +13,8 @@ import { Dashboard } from './components/Dashboard.tsx'
 import { MerchantSearch } from './components/MerchantSearch.tsx'
 import { MonthSwitcher } from './components/MonthSwitcher.tsx'
 import { filterByMerchantSearch } from './search.ts'
-import { previousCalendarMonth } from './totals.ts'
-import type { MerchantMap, MonthFile } from './types.ts'
+import { previousCalendarMonth, trendPoints } from './totals.ts'
+import type { MerchantMap, MonthFile, Transaction } from './types.ts'
 
 function currentPath(): string {
   return window.location.pathname
@@ -31,6 +31,9 @@ export default function App() {
   const [hasPreviousMonth, setHasPreviousMonth] = useState<boolean | null>(
     null,
   )
+  const [monthTransactions, setMonthTransactions] = useState<
+    Record<string, Transaction[]>
+  >({})
   const [search, setSearch] = useState('')
 
   useEffect(() => {
@@ -93,6 +96,29 @@ export default function App() {
   }, [selectedMonthId])
 
   useEffect(() => {
+    if (months.length === 0) return
+    const requested = months
+    let cancelled = false
+    void (async () => {
+      const entries = await Promise.all(
+        requested.map(async (month) => {
+          try {
+            const file = await fetchMonth(month)
+            return [month, file.transactions] as const
+          } catch {
+            return [month, [] as Transaction[]] as const
+          }
+        }),
+      )
+      if (cancelled) return
+      setMonthTransactions(Object.fromEntries(entries))
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [months])
+
+  useEffect(() => {
     if (!selectedMonthId) return
     const previousId = previousCalendarMonth(selectedMonthId)
     let cancelled = false
@@ -145,6 +171,10 @@ export default function App() {
     )
     setSelectedMonth(result.monthFile)
     setMerchantMap(result.merchantMap)
+    setMonthTransactions((current) => ({
+      ...current,
+      [result.monthFile.month]: result.monthFile.transactions,
+    }))
     void putMonth(result.monthFile.month, result.monthFile)
     void putMerchantMap(result.merchantMap)
   }
@@ -160,6 +190,10 @@ export default function App() {
       toCategory,
     )
     setSelectedMonth(result.monthFile)
+    setMonthTransactions((current) => ({
+      ...current,
+      [result.monthFile.month]: result.monthFile.transactions,
+    }))
     void putMonth(result.monthFile.month, result.monthFile)
   }
 
@@ -199,6 +233,12 @@ export default function App() {
               ? (previousMonth?.transactions ?? [])
               : null
           }
+          trend={trendPoints(months, {
+            ...monthTransactions,
+            ...(visibleMonth
+              ? { [visibleMonth.month]: visibleMonth.transactions }
+              : {}),
+          })}
         />
       ) : (
         <main>
