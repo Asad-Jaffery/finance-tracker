@@ -1,6 +1,6 @@
 # Finance tracker
 
-Local-only spending tracker. Drop a statement PDF into a Droid session in this repo; the agent follows `AGENTS.md` → `playbooks/ingest-statement.md`, writes `data/months/YYYY-MM.json`, and updates `data/merchant-map.json`. The React app never parses PDFs. Review charges on a nine-column kanban, drag mistakes, and look at month-over-month graphs. JSON on disk is the source of truth.
+Local-only spending tracker. Drop a statement PDF into a Droid session in this repo; the agent follows `AGENTS.md` → `playbooks/ingest-statement.md` and writes `data/months/YYYY-MM.json`. The React app never parses PDFs. Review charges on a nine-column kanban, drag mistakes, and look at month-over-month graphs. JSON on disk is the source of truth.
 
 ## Stack
 
@@ -27,7 +27,7 @@ Opens at http://127.0.0.1:5173 (binds `127.0.0.1` only, port 5173).
 
 ## Recategorize
 
-Default drag moves every current-month row with that `cleanedMerchant` and writes `merchant-map` with source `human`. Card menu **Move only this charge** moves one row and does not update the map. Months are independent.
+Dragging a card or using **Move only this charge** moves that transaction only. Each transaction retains its own category, so the same merchant can appear in different categories. Months are independent.
 
 ## Ingest
 
@@ -44,10 +44,9 @@ Writes gitignored `fixtures/synthetic-statement.pdf`. Golden file: `golden/synth
 ## Data
 
 - `data/categories.json`
-- `data/merchant-map.json`
 - `data/months/YYYY-MM.json`
 
-Dev writes (serve-only Vite plugin): `PUT /api/months/:yyyy-mm` and `PUT /api/merchant-map`.
+Dev writes (serve-only Vite plugin): `PUT /api/months/:yyyy-mm`.
 
 ## Scripts
 

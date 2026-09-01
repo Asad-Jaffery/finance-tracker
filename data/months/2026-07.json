@@ -1,97 +1,306 @@
 {
   "month": "2026-07",
-  "generatedAt": "2026-07-31T12:00:00.000Z",
-  "issuers": ["amex", "chase"],
+  "generatedAt": "2026-09-01T19:43:07.303Z",
+  "issuers": [
+    "robinhood"
+  ],
   "transactions": [
     {
-      "date": "2026-07-01",
-      "amount": 15.99,
-      "rawMerchant": "NETFLIX.COM",
-      "cleanedMerchant": "NETFLIX",
-      "issuer": "amex",
-      "kind": "purchase",
-      "category": "Subscriptions"
-    },
-    {
-      "date": "2026-07-03",
-      "amount": 13.1,
-      "rawMerchant": "CHIPOTLE #1823 SF",
-      "cleanedMerchant": "CHIPOTLE",
-      "issuer": "amex",
-      "kind": "purchase",
-      "category": "Food + coffee"
-    },
-    {
-      "date": "2026-07-05",
-      "amount": 64.2,
-      "rawMerchant": "WHOLE FOODS #102",
-      "cleanedMerchant": "WHOLE FOODS",
-      "issuer": "amex",
-      "kind": "purchase",
-      "category": "Groceries"
-    },
-    {
-      "date": "2026-07-08",
-      "amount": 5.75,
-      "rawMerchant": "STARBUCKS",
-      "cleanedMerchant": "STARBUCKS",
-      "issuer": "chase",
-      "kind": "purchase",
-      "category": "Food + coffee"
-    },
-    {
-      "date": "2026-07-10",
-      "amount": 41.0,
-      "rawMerchant": "SHELL OIL 12345678",
-      "cleanedMerchant": "SHELL OIL",
-      "issuer": "amex",
+      "date": "2026-07-12",
+      "amount": 56.27,
+      "rawMerchant": "COSTCO GAS #0110 ISSAQUAH WA",
+      "cleanedMerchant": "COSTCO GAS",
+      "issuer": "robinhood",
       "kind": "purchase",
       "category": "Gas"
     },
     {
       "date": "2026-07-12",
-      "amount": 22.5,
-      "rawMerchant": "UBER *TRIP",
-      "cleanedMerchant": "UBER",
-      "issuer": "chase",
+      "amount": 24.06,
+      "rawMerchant": "TST*TAVERN HALL Bellevue WA",
+      "cleanedMerchant": "TAVERN HALL",
+      "issuer": "robinhood",
       "kind": "purchase",
-      "category": "Transit"
+      "category": "Food + coffee"
     },
     {
-      "date": "2026-07-15",
-      "amount": 29.99,
-      "rawMerchant": "AMAZON.COM*AMZN.COM/BILL",
-      "cleanedMerchant": "AMAZON.COM",
-      "issuer": "chase",
+      "date": "2026-07-13",
+      "amount": 6.56,
+      "rawMerchant": "SQ *THE WEEKEND COFFEE Snoqualmie WA",
+      "cleanedMerchant": "THE WEEKEND COFFEE",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-07-17",
+      "amount": 126.18,
+      "rawMerchant": "Frontier Dermatology Salem OR",
+      "cleanedMerchant": "FRONTIER DERMATOLOGY",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Other / uncategorized"
+    },
+    {
+      "date": "2026-07-17",
+      "amount": 55,
+      "rawMerchant": "SQ *UPPERCUTS BARBERSHOP Bellevue WA",
+      "cleanedMerchant": "UPPERCUTS BARBERSHOP",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Other / uncategorized"
+    },
+    {
+      "date": "2026-07-17",
+      "amount": 33.45,
+      "rawMerchant": "TARGET T-0996 ISSAQUAH WA",
+      "cleanedMerchant": "TARGET",
+      "issuer": "robinhood",
       "kind": "purchase",
       "category": "Shopping"
     },
     {
-      "date": "2026-07-18",
-      "amount": 38.4,
-      "rawMerchant": "TRADER JOE'S",
-      "cleanedMerchant": "TRADER JOE'S",
-      "issuer": "chase",
-      "kind": "purchase",
-      "category": "Groceries"
-    },
-    {
       "date": "2026-07-20",
-      "amount": 16.5,
-      "rawMerchant": "AMC THEATRES",
-      "cleanedMerchant": "AMC THEATRES",
-      "issuer": "chase",
+      "amount": 39.98,
+      "rawMerchant": "CINEMARK 399 ONLINE Mountain View CA",
+      "cleanedMerchant": "CINEMARK",
+      "issuer": "robinhood",
       "kind": "purchase",
       "category": "Entertainment"
     },
     {
-      "date": "2026-07-25",
-      "amount": 3.5,
-      "rawMerchant": "ATM FEE 1234",
-      "cleanedMerchant": "ATM FEE",
-      "issuer": "amex",
+      "date": "2026-07-22",
+      "amount": 0.18,
+      "rawMerchant": "FOREIGN TRANSACTION FEE",
+      "cleanedMerchant": "FOREIGN TRANSACTION FEE",
+      "issuer": "robinhood",
       "kind": "purchase",
       "category": "Other / uncategorized"
+    },
+    {
+      "date": "2026-07-22",
+      "amount": 0.41,
+      "rawMerchant": "FOREIGN TRANSACTION FEE",
+      "cleanedMerchant": "FOREIGN TRANSACTION FEE",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Other / uncategorized"
+    },
+    {
+      "date": "2026-07-22",
+      "amount": 6.33,
+      "rawMerchant": "FRESHSLICE PIZZA TORONTO ON",
+      "cleanedMerchant": "FRESHSLICE PIZZA",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-07-22",
+      "amount": 13.86,
+      "rawMerchant": "KARACHI KABABWALA TORONTO ON",
+      "cleanedMerchant": "KARACHI KABABWALA",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-07-24",
+      "amount": 112.56,
+      "rawMerchant": "Browns TO Eaton Centre Toronto ON",
+      "cleanedMerchant": "BROWNS TO EATON CENTRE",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Shopping"
+    },
+    {
+      "date": "2026-07-24",
+      "amount": 0.21,
+      "rawMerchant": "FOREIGN TRANSACTION FEE",
+      "cleanedMerchant": "FOREIGN TRANSACTION FEE",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Other / uncategorized"
+    },
+    {
+      "date": "2026-07-24",
+      "amount": 3.37,
+      "rawMerchant": "FOREIGN TRANSACTION FEE",
+      "cleanedMerchant": "FOREIGN TRANSACTION FEE",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Other / uncategorized"
+    },
+    {
+      "date": "2026-07-24",
+      "amount": 7.11,
+      "rawMerchant": "TST-Freehouse - Isabel TORONTO ON",
+      "cleanedMerchant": "FREEHOUSE - ISABEL",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-07-26",
+      "amount": 2,
+      "rawMerchant": "PRESIDIO TRUST PARKING 415-561-5300 CA",
+      "cleanedMerchant": "PRESIDIO TRUST PARKING",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Transit"
+    },
+    {
+      "date": "2026-07-27",
+      "amount": 31.84,
+      "rawMerchant": "SQ *ZAREEN'S PALO ALTO Palo Alto CA",
+      "cleanedMerchant": "ZAREEN'S PALO ALTO",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-07-27",
+      "amount": 54.4,
+      "rawMerchant": "TST*CRACKED & BATTERED - 415-926-8645 CA",
+      "cleanedMerchant": "CRACKED & BATTERED",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-07-28",
+      "amount": 3.3,
+      "rawMerchant": "CHICK-FIL-A #03397 FREMONT CA",
+      "cleanedMerchant": "CHICK-FIL-A",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-07-28",
+      "amount": 10.32,
+      "rawMerchant": "MEN088 MENCHIES BELMON BELMONT CA",
+      "cleanedMerchant": "MENCHIES",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-07-28",
+      "amount": 3,
+      "rawMerchant": "METROPOLIS PARKING METROPOLIS.IO TN",
+      "cleanedMerchant": "METROPOLIS PARKING",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Transit"
+    },
+    {
+      "date": "2026-07-28",
+      "amount": 6.4,
+      "rawMerchant": "TST*LA CAFETERIA Daly City CA",
+      "cleanedMerchant": "LA CAFETERIA",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-07-29",
+      "amount": 29.5,
+      "rawMerchant": "FWD*Cal Burgers More BERKELEY CA",
+      "cleanedMerchant": "FWD*CAL BURGERS MORE",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-07-29",
+      "amount": 37.02,
+      "rawMerchant": "KEBAB BABA SAN FRANCISCO CA",
+      "cleanedMerchant": "KEBAB BABA",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-07-29",
+      "amount": 16.42,
+      "rawMerchant": "TST*CHICKEN GS - FREMON 650-605-5175 CA",
+      "cleanedMerchant": "CHICKEN GS - FREMON",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-07-30",
+      "amount": 13.59,
+      "rawMerchant": "MCDONALD'S F5461 SANTA CLARA CA",
+      "cleanedMerchant": "MCDONALD'S",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-07-30",
+      "amount": 39.04,
+      "rawMerchant": "SQ *TKS SANTA CLARA Santa Clara CA",
+      "cleanedMerchant": "TKS SANTA CLARA",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-08-01",
+      "amount": 50,
+      "rawMerchant": "GOLD ANNUAL SUBSCRIPTIO",
+      "cleanedMerchant": "GOLD ANNUAL SUBSCRIPTIO",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Subscriptions"
+    },
+    {
+      "date": "2026-08-01",
+      "amount": 10.92,
+      "rawMerchant": "TST* TONY'S PIZZA NAPOLET SAN FRANCISCO CA",
+      "cleanedMerchant": "TONY'S PIZZA NAPOLET",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-08-02",
+      "amount": 14.91,
+      "rawMerchant": "REG ISSAQUAH 12 1942 ISSAQUAH WA",
+      "cleanedMerchant": "REG ISSAQUAH 12",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Entertainment"
+    },
+    {
+      "date": "2026-08-02",
+      "amount": 13.71,
+      "rawMerchant": "TST*GARLIC CRUSH ISSAQUA Issaquah WA",
+      "cleanedMerchant": "GARLIC CRUSH ISSAQUA",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-08-03",
+      "amount": 2.2,
+      "rawMerchant": "COSTCO WHSE #0110 ISSAQUAH WA",
+      "cleanedMerchant": "COSTCO WHSE",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Groceries"
+    },
+    {
+      "date": "2026-08-03",
+      "amount": 185.98,
+      "rawMerchant": "COSTCO WHSE #0110 ISSAQUAH WA",
+      "cleanedMerchant": "COSTCO WHSE",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Groceries"
     }
   ]
 }

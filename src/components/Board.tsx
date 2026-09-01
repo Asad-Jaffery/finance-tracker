@@ -66,12 +66,10 @@ const keyboardCoordinateGetter: KeyboardCoordinateGetter = (
 export function Board({
   categories,
   transactions,
-  onDefaultDrag,
   onOnlyThisCharge,
 }: {
   categories: string[]
   transactions: Transaction[]
-  onDefaultDrag?: (cleanedMerchant: string, toCategory: string) => void
   onOnlyThisCharge?: (identity: string, toCategory: string) => void
 }) {
   const columns = groupByClosedCategories(categories, transactions)
@@ -87,14 +85,10 @@ export function Board({
     const toCategory = String(over.id)
     if (!categories.includes(toCategory)) return
 
-    const cleanedMerchant = active.data.current?.cleanedMerchant
     const fromCategory = active.data.current?.category
-    if (typeof cleanedMerchant !== 'string' || cleanedMerchant.length === 0) {
-      return
-    }
     if (fromCategory === toCategory) return
 
-    onDefaultDrag?.(cleanedMerchant, toCategory)
+    onOnlyThisCharge?.(String(active.id), toCategory)
   }
 
   return (

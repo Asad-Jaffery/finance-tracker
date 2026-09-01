@@ -1,4 +1,4 @@
-import type { CategoriesFile, MerchantMap, MonthFile } from './types.ts'
+import type { CategoriesFile, MonthFile } from './types.ts'
 
 async function getJson<T>(url: string): Promise<T> {
   const response = await fetch(url)
@@ -15,10 +15,6 @@ export async function fetchMonths(): Promise<string[]> {
 
 export async function fetchMonth(month: string): Promise<MonthFile> {
   return getJson<MonthFile>(`/api/months/${month}`)
-}
-
-export async function fetchMerchantMap(): Promise<MerchantMap> {
-  return getJson<MerchantMap>('/api/merchant-map')
 }
 
 export async function fetchCategories(): Promise<CategoriesFile> {
@@ -38,8 +34,4 @@ async function putJson(url: string, body: unknown): Promise<void> {
 
 export async function putMonth(month: string, file: MonthFile): Promise<void> {
   await putJson(`/api/months/${month}`, file)
-}
-
-export async function putMerchantMap(map: MerchantMap): Promise<void> {
-  await putJson('/api/merchant-map', map)
 }

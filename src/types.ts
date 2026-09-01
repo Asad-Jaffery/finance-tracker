@@ -1,7 +1,5 @@
 export type Kind = 'purchase' | 'refund'
 
-export type MerchantSource = 'human' | 'llm'
-
 export interface Transaction {
   date: string
   amount: number
@@ -18,13 +16,6 @@ export interface MonthFile {
   issuers: string[]
   transactions: Transaction[]
 }
-
-export interface MerchantMapEntry {
-  category: string
-  source: MerchantSource
-}
-
-export type MerchantMap = Record<string, MerchantMapEntry>
 
 export interface CategoriesFile {
   version: number

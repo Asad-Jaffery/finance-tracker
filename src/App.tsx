@@ -1,20 +1,18 @@
 import { useEffect, useState, type MouseEvent } from 'react'
 import {
   fetchCategories,
-  fetchMerchantMap,
   fetchMonth,
   fetchMonths,
-  putMerchantMap,
   putMonth,
 } from './api.ts'
-import { applyDefaultDrag, applyOnlyThisCharge } from './recategorize.ts'
+import { applyOnlyThisCharge } from './recategorize.ts'
 import { Board } from './components/Board.tsx'
 import { Dashboard } from './components/Dashboard.tsx'
 import { MerchantSearch } from './components/MerchantSearch.tsx'
 import { MonthSwitcher } from './components/MonthSwitcher.tsx'
 import { filterByMerchantSearch } from './search.ts'
 import { previousCalendarMonth, trendPoints } from './totals.ts'
-import type { MerchantMap, MonthFile, Transaction } from './types.ts'
+import type { MonthFile, Transaction } from './types.ts'
 
 function currentPath(): string {
   return window.location.pathname
@@ -24,7 +22,6 @@ export default function App() {
   const [path, setPath] = useState(currentPath)
   const [months, setMonths] = useState<string[]>([])
   const [categories, setCategories] = useState<string[]>([])
-  const [merchantMap, setMerchantMap] = useState<MerchantMap>({})
   const [selectedMonthId, setSelectedMonthId] = useState('')
   const [selectedMonth, setSelectedMonth] = useState<MonthFile | null>(null)
   const [previousMonth, setPreviousMonth] = useState<MonthFile | null>(null)
@@ -66,11 +63,6 @@ export default function App() {
         setCategories([])
       }
 
-      try {
-        setMerchantMap(await fetchMerchantMap())
-      } catch {
-        setMerchantMap({})
-      }
     })()
   }, [])
 
@@ -159,42 +151,21 @@ export default function App() {
     search,
   )
 
-  function handleDefaultDrag(cleanedMerchant: string, toCategory: string) {
-    if (!visibleMonth) return
-    if (!categories.includes(toCategory)) return
-
-    const result = applyDefaultDrag(
-      visibleMonth,
-      merchantMap,
-      cleanedMerchant,
-      toCategory,
-    )
-    setSelectedMonth(result.monthFile)
-    setMerchantMap(result.merchantMap)
-    setMonthTransactions((current) => ({
-      ...current,
-      [result.monthFile.month]: result.monthFile.transactions,
-    }))
-    void putMonth(result.monthFile.month, result.monthFile)
-    void putMerchantMap(result.merchantMap)
-  }
-
   function handleOnlyThisCharge(identity: string, toCategory: string) {
     if (!visibleMonth) return
     if (!categories.includes(toCategory)) return
 
     const result = applyOnlyThisCharge(
       visibleMonth,
-      merchantMap,
       identity,
       toCategory,
     )
-    setSelectedMonth(result.monthFile)
+    setSelectedMonth(result)
     setMonthTransactions((current) => ({
       ...current,
-      [result.monthFile.month]: result.monthFile.transactions,
+      [result.month]: result.transactions,
     }))
-    void putMonth(result.monthFile.month, result.monthFile)
+    void putMonth(result.month, result)
   }
 
   return (
@@ -252,7 +223,6 @@ export default function App() {
           <Board
             categories={categories}
             transactions={transactions}
-            onDefaultDrag={handleDefaultDrag}
             onOnlyThisCharge={handleOnlyThisCharge}
           />
           <p data-testid="months-list" hidden>
@@ -260,9 +230,6 @@ export default function App() {
           </p>
           <p data-testid="categories-list" hidden>
             {categories.join(',')}
-          </p>
-          <p data-testid="merchant-map-count" hidden>
-            {Object.keys(merchantMap).length}
           </p>
         </main>
       )}

@@ -104,7 +104,7 @@ describe('isValidMonthId', () => {
     expect(isValidMonthId('2026-13')).toBe(false)
     expect(isValidMonthId('2026-00')).toBe(false)
     expect(isValidMonthId('not-a-month')).toBe(false)
-    expect(isValidMonthId('../merchant-map')).toBe(false)
+    expect(isValidMonthId('../categories')).toBe(false)
     expect(isValidMonthId('2026-08.json')).toBe(false)
     expect(isValidMonthId('foo/bar')).toBe(false)
   })
@@ -193,22 +193,6 @@ describe('local data read API', () => {
     expect(traversal.status).toBe(400)
   })
 
-  it('returns {} when merchant-map.json is missing', async () => {
-    const data = await withDataRoot()
-    cleanup = data.cleanup
-    const server = await listen(data.root)
-    close = server.close
-
-    const missing = await fetch(`${server.url}/api/merchant-map`)
-    expect(missing.status).toBe(200)
-    expect(await missing.json()).toEqual({})
-
-    const map = { CHIPOTLE: { category: 'Food + coffee', source: 'llm' } }
-    await writeFile(path.join(data.root, 'data', 'merchant-map.json'), JSON.stringify(map))
-    const found = await fetch(`${server.url}/api/merchant-map`)
-    expect(await found.json()).toEqual(map)
-  })
-
   it('returns categories.json when the file exists', async () => {
     const data = await withDataRoot()
     cleanup = data.cleanup
@@ -250,7 +234,7 @@ describe('local data write API', () => {
     cleanup = undefined
   })
 
-  it('PUT then GET roundtrips month and merchant-map JSON', async () => {
+  it('PUT then GET roundtrips month JSON', async () => {
     const data = await withDataRoot()
     cleanup = data.cleanup
     const server = await listen(data.root)
@@ -277,37 +261,27 @@ describe('local data write API', () => {
     expect(gotMonth.status).toBe(200)
     expect(await gotMonth.json()).toEqual(month)
 
-    const map = { CHIPOTLE: { category: 'Shopping', source: 'human' } }
-    const putMap = await fetch(`${server.url}/api/merchant-map`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(map),
-    })
-    expect(putMap.status).toBe(200)
-    expect(await fetch(`${server.url}/api/merchant-map`).then((r) => r.json())).toEqual(map)
   })
 
   it('rejects traversal and non-JSON writes without changing disk', async () => {
     const data = await withDataRoot()
     cleanup = data.cleanup
-    const existingMap = { UBER: { category: 'Transit', source: 'llm' } }
     await writeFile(
       path.join(data.root, 'data', 'months', '2026-08.json'),
       JSON.stringify(SAMPLE_MONTH),
     )
-    await writeFile(path.join(data.root, 'data', 'merchant-map.json'), JSON.stringify(existingMap))
     const server = await listen(data.root)
     close = server.close
     const origin = new URL(server.url)
 
-    const traversal = await rawRequest(origin, '/api/months/../merchant-map', {
+    const traversal = await rawRequest(origin, '/api/months/../categories', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ month: 'hacked' }),
     })
     expect(traversal.status).toBe(400)
 
-    const encoded = await rawRequest(origin, '/api/months/%2e%2e/merchant-map', {
+    const encoded = await rawRequest(origin, '/api/months/%2e%2e/categories', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ month: 'hacked' }),
@@ -321,16 +295,8 @@ describe('local data write API', () => {
     })
     expect(notJson.status).toBe(400)
 
-    const arrayMap = await fetch(`${server.url}/api/merchant-map`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: '[]',
-    })
-    expect(arrayMap.status).toBe(400)
-
     expect(await fetch(`${server.url}/api/months/2026-08`).then((r) => r.json())).toEqual(
       SAMPLE_MONTH,
     )
-    expect(await fetch(`${server.url}/api/merchant-map`).then((r) => r.json())).toEqual(existingMap)
   })
 })
