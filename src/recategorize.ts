@@ -4,6 +4,10 @@ function uniqueSortedIssuers(transactions: Transaction[]): string[] {
   return [...new Set(transactions.map((tx) => tx.issuer))].sort()
 }
 
+export function transactionIdentity(tx: Transaction): string {
+  return `${tx.date}|${tx.amount}|${tx.rawMerchant}`
+}
+
 export function applyDefaultDrag(
   monthFile: MonthFile,
   merchantMap: MerchantMap,
@@ -25,5 +29,26 @@ export function applyDefaultDrag(
       ...merchantMap,
       [cleanedMerchant]: { category: toCategory, source: 'human' },
     },
+  }
+}
+
+export function applyOnlyThisCharge(
+  monthFile: MonthFile,
+  merchantMap: MerchantMap,
+  identity: string,
+  toCategory: string,
+): { monthFile: MonthFile; merchantMap: MerchantMap } {
+  const transactions = monthFile.transactions.map((tx) =>
+    transactionIdentity(tx) === identity ? { ...tx, category: toCategory } : tx,
+  )
+
+  return {
+    monthFile: {
+      ...monthFile,
+      generatedAt: new Date().toISOString(),
+      issuers: uniqueSortedIssuers(transactions),
+      transactions,
+    },
+    merchantMap,
   }
 }

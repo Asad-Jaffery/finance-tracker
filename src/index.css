@@ -156,9 +156,84 @@ main {
   opacity: 0.88;
 }
 
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.35rem;
+}
+
 .card-merchant {
   margin: 0 0 0.2rem;
   font-size: 0.92rem;
+  flex: 1;
+}
+
+.card-menu-wrap {
+  flex: 0 0 auto;
+}
+
+.card-menu {
+  position: relative;
+}
+
+.card-menu-summary {
+  cursor: pointer;
+  font-size: 0.72rem;
+  font-weight: 600;
+  list-style: none;
+  padding: 0.05rem 0.35rem;
+  border: 1px solid #cfc4e0;
+  border-radius: 4px;
+  background: #f6f4f8;
+}
+
+.card-menu-summary::-webkit-details-marker {
+  display: none;
+}
+
+.card-menu-panel {
+  position: absolute;
+  right: 0;
+  z-index: 3;
+  min-width: 11.5rem;
+  margin-top: 0.2rem;
+  padding: 0.4rem;
+  background: #fff;
+  border: 1px solid #cfc4e0;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
+}
+
+.card-menu-heading {
+  margin: 0 0 0.3rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.card-menu-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.15rem;
+}
+
+.card-menu-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  font-size: 0.78rem;
+  padding: 0.2rem 0.3rem;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.card-menu-item:hover {
+  background: #ece7f3;
 }
 
 .card-amount,

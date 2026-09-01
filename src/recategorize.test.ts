@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { applyDefaultDrag } from './recategorize.ts'
+import { applyDefaultDrag, applyOnlyThisCharge, transactionIdentity } from './recategorize.ts'
 import type { MerchantMap, MonthFile } from './types.ts'
 
 const monthFile: MonthFile = {
@@ -58,5 +58,17 @@ describe('applyDefaultDrag', () => {
     expect(result.monthFile.generatedAt).not.toBe(monthFile.generatedAt)
     expect(result.monthFile.issuers).toEqual(['amex', 'chase'])
     expect(monthFile.transactions[0]?.category).toBe('Food + coffee')
+  })
+})
+
+describe('applyOnlyThisCharge', () => {
+  it('moves one identity and leaves the merchant map untouched', () => {
+    const identity = transactionIdentity(monthFile.transactions[0]!)
+    const result = applyOnlyThisCharge(monthFile, merchantMap, identity, 'Groceries')
+    expect(result.monthFile.transactions[0]?.category).toBe('Groceries')
+    expect(result.monthFile.transactions[1]?.category).toBe('Food + coffee')
+    expect(result.merchantMap).toBe(merchantMap)
+    expect(result.merchantMap.CHIPOTLE).toEqual({ category: 'Food + coffee', source: 'llm' })
+    expect(result.monthFile.generatedAt).not.toBe(monthFile.generatedAt)
   })
 })

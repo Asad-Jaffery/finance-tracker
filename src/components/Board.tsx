@@ -14,10 +14,12 @@ export function Board({
   categories,
   transactions,
   onDefaultDrag,
+  onOnlyThisCharge,
 }: {
   categories: string[]
   transactions: Transaction[]
   onDefaultDrag?: (cleanedMerchant: string, toCategory: string) => void
+  onOnlyThisCharge?: (identity: string, toCategory: string) => void
 }) {
   const columns = groupByClosedCategories(categories, transactions)
   const sensors = useSensors(
@@ -52,7 +54,9 @@ export function Board({
           <Column
             key={column.category}
             category={column.category}
+            categories={categories}
             transactions={column.transactions}
+            onOnlyThisCharge={onOnlyThisCharge}
           />
         ))}
       </div>

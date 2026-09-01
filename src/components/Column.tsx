@@ -5,10 +5,14 @@ import { Card } from './Card.tsx'
 
 export function Column({
   category,
+  categories,
   transactions,
+  onOnlyThisCharge,
 }: {
   category: string
+  categories: string[]
   transactions: Transaction[]
+  onOnlyThisCharge?: (identity: string, toCategory: string) => void
 }) {
   const { setNodeRef, isOver } = useDroppable({ id: category })
 
@@ -26,7 +30,12 @@ export function Column({
       </header>
       <div className="column-cards">
         {transactions.map((tx) => (
-          <Card key={`${tx.date}|${tx.amount}|${tx.rawMerchant}`} transaction={tx} />
+          <Card
+            key={`${tx.date}|${tx.amount}|${tx.rawMerchant}`}
+            transaction={tx}
+            categories={categories}
+            onOnlyThisCharge={onOnlyThisCharge}
+          />
         ))}
       </div>
     </section>

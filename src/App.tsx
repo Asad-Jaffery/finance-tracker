@@ -7,7 +7,7 @@ import {
   putMerchantMap,
   putMonth,
 } from './api.ts'
-import { applyDefaultDrag } from './recategorize.ts'
+import { applyDefaultDrag, applyOnlyThisCharge } from './recategorize.ts'
 import { Board } from './components/Board.tsx'
 import { Dashboard } from './components/Dashboard.tsx'
 import { MerchantSearch } from './components/MerchantSearch.tsx'
@@ -119,6 +119,20 @@ export default function App() {
     void putMerchantMap(result.merchantMap)
   }
 
+  function handleOnlyThisCharge(identity: string, toCategory: string) {
+    if (!visibleMonth) return
+    if (!categories.includes(toCategory)) return
+
+    const result = applyOnlyThisCharge(
+      visibleMonth,
+      merchantMap,
+      identity,
+      toCategory,
+    )
+    setSelectedMonth(result.monthFile)
+    void putMonth(result.monthFile.month, result.monthFile)
+  }
+
   return (
     <div className="app">
       <header className="app-header">
@@ -154,6 +168,7 @@ export default function App() {
             categories={categories}
             transactions={transactions}
             onDefaultDrag={handleDefaultDrag}
+            onOnlyThisCharge={handleOnlyThisCharge}
           />
           <p data-testid="months-list" hidden>
             {months.join(',')}
