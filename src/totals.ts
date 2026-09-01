@@ -36,3 +36,19 @@ export function groupByClosedCategories(
     transactions: buckets.get(category) ?? [],
   }))
 }
+
+export interface CategoryTotal {
+  category: string
+  total: number
+}
+
+/** One signed total per closed category, including $0 categories. Refunds reduce the sum. */
+export function categoryTotals(
+  categories: string[],
+  transactions: Transaction[],
+): CategoryTotal[] {
+  return groupByClosedCategories(categories, transactions).map((column) => ({
+    category: column.category,
+    total: columnTotal(column.transactions),
+  }))
+}

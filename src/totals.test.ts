@@ -1,7 +1,7 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest'
 import type { Transaction } from './types.ts'
-import { columnTotal, formatUsd, groupByClosedCategories } from './totals.ts'
+import { categoryTotals, columnTotal, formatUsd, groupByClosedCategories } from './totals.ts'
 
 const CATEGORIES = [
   'Food + coffee',
@@ -75,5 +75,22 @@ describe('groupByClosedCategories', () => {
     expect(grouped).toHaveLength(9)
     expect(grouped.every((column) => column.category !== 'Gym')).toBe(true)
     expect(grouped.every((column) => column.transactions.length === 0)).toBe(true)
+  })
+})
+
+describe('categoryTotals', () => {
+  it('returns nine signed totals including zeros and refunds', () => {
+    const totals = categoryTotals(
+      [...CATEGORIES],
+      [
+        tx({ amount: 50, category: 'Food + coffee' }),
+        tx({ amount: -10, category: 'Food + coffee', kind: 'refund' }),
+      ],
+    )
+    expect(totals).toHaveLength(9)
+    expect(totals.map((row) => row.category)).toEqual([...CATEGORIES])
+    expect(totals[0]).toEqual({ category: 'Food + coffee', total: 40 })
+    expect(totals[1]).toEqual({ category: 'Groceries', total: 0 })
+    expect(totals[8]).toEqual({ category: 'Other / uncategorized', total: 0 })
   })
 })

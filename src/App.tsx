@@ -160,7 +160,10 @@ export default function App() {
         </nav>
       </header>
       {isDashboard ? (
-        <Dashboard />
+        <Dashboard
+          categories={categories}
+          transactions={visibleMonth?.transactions ?? []}
+        />
       ) : (
         <main>
           <MerchantSearch value={search} onChange={setSearch} />
