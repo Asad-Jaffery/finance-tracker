@@ -80,6 +80,23 @@ body {
   font-size: 0.9rem;
 }
 
+.vs-last-month-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.vs-last-month-table th,
+.vs-last-month-table td {
+  text-align: left;
+  padding: 0.35rem 0.5rem;
+  border-bottom: 1px solid #eee8f4;
+}
+
+.vs-last-month-table th {
+  font-weight: 600;
+}
+
 .month-switcher,
 .merchant-search {
   display: flex;

@@ -8,17 +8,29 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { categoryTotals, formatUsd } from '../totals.ts'
+import {
+  categoryTotals,
+  formatSignedDelta,
+  formatUsd,
+  vsLastMonth,
+} from '../totals.ts'
 import type { Transaction } from '../types.ts'
 
 export function Dashboard({
   categories,
   transactions,
+  previousTransactions,
+  previousKnown,
 }: {
   categories: string[]
   transactions: Transaction[]
+  previousTransactions: Transaction[] | null
+  previousKnown: boolean
 }) {
   const totals = categoryTotals(categories, transactions)
+  const comparison = previousKnown
+    ? vsLastMonth(categories, transactions, previousTransactions)
+    : []
   const isEmpty = transactions.length === 0
 
   return (
@@ -74,7 +86,45 @@ export function Dashboard({
       </section>
       <section data-testid="dashboard-vs-last-month">
         <h3>Vs last month</h3>
-        <p>Comparison placeholder.</p>
+        <table className="vs-last-month-table">
+          <thead>
+            <tr>
+              <th>Category</th>
+              <th>This month</th>
+              <th>Previous month</th>
+              <th>Delta</th>
+            </tr>
+          </thead>
+          <tbody>
+            {comparison.map((row) => (
+              <tr
+                key={row.category}
+                data-testid="vs-last-month-row"
+                data-category={row.category}
+                data-this={String(row.thisTotal)}
+                data-previous={
+                  row.hasPrevious
+                    ? String(row.previousTotal)
+                    : 'no previous month'
+                }
+                data-delta={row.hasPrevious ? String(row.delta) : ''}
+              >
+                <td>{row.category}</td>
+                <td>{formatUsd(row.thisTotal)}</td>
+                <td>
+                  {row.hasPrevious
+                    ? formatUsd(row.previousTotal ?? 0)
+                    : 'no previous month'}
+                </td>
+                <td>
+                  {row.hasPrevious
+                    ? formatSignedDelta(row.delta ?? 0)
+                    : 'no previous month'}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </section>
       <section data-testid="dashboard-trend">
         <h3>Trend</h3>

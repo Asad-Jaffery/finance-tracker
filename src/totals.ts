@@ -52,3 +52,59 @@ export function categoryTotals(
     total: columnTotal(column.transactions),
   }))
 }
+
+/** Prior calendar YYYY-MM, not the previous item in the on-disk months list. */
+export function previousCalendarMonth(month: string): string {
+  const year = Number(month.slice(0, 4))
+  const mon = Number(month.slice(5, 7))
+  if (mon === 1) return `${year - 1}-12`
+  return `${year}-${String(mon - 1).padStart(2, '0')}`
+}
+
+export interface VsLastMonthRow {
+  category: string
+  thisTotal: number
+  previousTotal: number | null
+  delta: number | null
+  hasPrevious: boolean
+}
+
+/**
+ * Per-category this / previous / signed delta.
+ * `previousTransactions === null` means the previous calendar-month file is missing
+ * (never treat that as $0).
+ */
+export function vsLastMonth(
+  categories: string[],
+  thisTransactions: Transaction[],
+  previousTransactions: Transaction[] | null,
+): VsLastMonthRow[] {
+  const thisTotals = categoryTotals(categories, thisTransactions)
+  if (previousTransactions === null) {
+    return thisTotals.map((row) => ({
+      category: row.category,
+      thisTotal: row.total,
+      previousTotal: null,
+      delta: null,
+      hasPrevious: false,
+    }))
+  }
+  const previousTotals = categoryTotals(categories, previousTransactions)
+  return thisTotals.map((row, index) => {
+    const previousTotal = previousTotals[index]?.total ?? 0
+    return {
+      category: row.category,
+      thisTotal: row.total,
+      previousTotal,
+      delta: row.total - previousTotal,
+      hasPrevious: true,
+    }
+  })
+}
+
+/** Sign on nonzero deltas (`+$1.00` / `-$1.00`). Zero stays `$0.00`. */
+export function formatSignedDelta(delta: number): string {
+  if (delta === 0) return formatUsd(0)
+  if (delta > 0) return `+${formatUsd(delta)}`
+  return formatUsd(delta)
+}

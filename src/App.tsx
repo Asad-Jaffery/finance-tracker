@@ -13,6 +13,7 @@ import { Dashboard } from './components/Dashboard.tsx'
 import { MerchantSearch } from './components/MerchantSearch.tsx'
 import { MonthSwitcher } from './components/MonthSwitcher.tsx'
 import { filterByMerchantSearch } from './search.ts'
+import { previousCalendarMonth } from './totals.ts'
 import type { MerchantMap, MonthFile } from './types.ts'
 
 function currentPath(): string {
@@ -26,6 +27,10 @@ export default function App() {
   const [merchantMap, setMerchantMap] = useState<MerchantMap>({})
   const [selectedMonthId, setSelectedMonthId] = useState('')
   const [selectedMonth, setSelectedMonth] = useState<MonthFile | null>(null)
+  const [previousMonth, setPreviousMonth] = useState<MonthFile | null>(null)
+  const [hasPreviousMonth, setHasPreviousMonth] = useState<boolean | null>(
+    null,
+  )
   const [search, setSearch] = useState('')
 
   useEffect(() => {
@@ -79,6 +84,31 @@ export default function App() {
       } catch {
         if (!cancelled) {
           setSelectedMonth(null)
+        }
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [selectedMonthId])
+
+  useEffect(() => {
+    if (!selectedMonthId) return
+    const previousId = previousCalendarMonth(selectedMonthId)
+    let cancelled = false
+    setHasPreviousMonth(null)
+    setPreviousMonth(null)
+    void (async () => {
+      try {
+        const file = await fetchMonth(previousId)
+        if (!cancelled) {
+          setPreviousMonth(file)
+          setHasPreviousMonth(true)
+        }
+      } catch {
+        if (!cancelled) {
+          setPreviousMonth(null)
+          setHasPreviousMonth(false)
         }
       }
     })()
@@ -163,6 +193,12 @@ export default function App() {
         <Dashboard
           categories={categories}
           transactions={visibleMonth?.transactions ?? []}
+          previousKnown={hasPreviousMonth !== null}
+          previousTransactions={
+            hasPreviousMonth === true
+              ? (previousMonth?.transactions ?? [])
+              : null
+          }
         />
       ) : (
         <main>
