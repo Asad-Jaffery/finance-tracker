@@ -1,5 +1,13 @@
 import { useEffect, useState, type MouseEvent } from 'react'
-import { fetchCategories, fetchMerchantMap, fetchMonth, fetchMonths } from './api.ts'
+import {
+  fetchCategories,
+  fetchMerchantMap,
+  fetchMonth,
+  fetchMonths,
+  putMerchantMap,
+  putMonth,
+} from './api.ts'
+import { applyDefaultDrag } from './recategorize.ts'
 import { Board } from './components/Board.tsx'
 import { Dashboard } from './components/Dashboard.tsx'
 import { MerchantSearch } from './components/MerchantSearch.tsx'
@@ -95,6 +103,22 @@ export default function App() {
     search,
   )
 
+  function handleDefaultDrag(cleanedMerchant: string, toCategory: string) {
+    if (!visibleMonth) return
+    if (!categories.includes(toCategory)) return
+
+    const result = applyDefaultDrag(
+      visibleMonth,
+      merchantMap,
+      cleanedMerchant,
+      toCategory,
+    )
+    setSelectedMonth(result.monthFile)
+    setMerchantMap(result.merchantMap)
+    void putMonth(result.monthFile.month, result.monthFile)
+    void putMerchantMap(result.merchantMap)
+  }
+
   return (
     <div className="app">
       <header className="app-header">
@@ -126,7 +150,11 @@ export default function App() {
       ) : (
         <main>
           <MerchantSearch value={search} onChange={setSearch} />
-          <Board categories={categories} transactions={transactions} />
+          <Board
+            categories={categories}
+            transactions={transactions}
+            onDefaultDrag={handleDefaultDrag}
+          />
           <p data-testid="months-list" hidden>
             {months.join(',')}
           </p>

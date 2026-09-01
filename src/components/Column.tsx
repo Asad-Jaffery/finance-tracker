@@ -1,3 +1,4 @@
+import { useDroppable } from '@dnd-kit/core'
 import { columnTotal, formatUsd } from '../totals.ts'
 import type { Transaction } from '../types.ts'
 import { Card } from './Card.tsx'
@@ -9,9 +10,12 @@ export function Column({
   category: string
   transactions: Transaction[]
 }) {
+  const { setNodeRef, isOver } = useDroppable({ id: category })
+
   return (
     <section
-      className="column"
+      ref={setNodeRef}
+      className={isOver ? 'column column-over' : 'column'}
       data-testid={`column-${category}`}
       data-category={category}
     >

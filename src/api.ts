@@ -24,3 +24,22 @@ export async function fetchMerchantMap(): Promise<MerchantMap> {
 export async function fetchCategories(): Promise<CategoriesFile> {
   return getJson<CategoriesFile>('/api/categories')
 }
+
+async function putJson(url: string, body: unknown): Promise<void> {
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  })
+  if (!response.ok) {
+    throw new Error(`PUT ${url} failed: ${response.status}`)
+  }
+}
+
+export async function putMonth(month: string, file: MonthFile): Promise<void> {
+  await putJson(`/api/months/${month}`, file)
+}
+
+export async function putMerchantMap(map: MerchantMap): Promise<void> {
+  await putJson('/api/merchant-map', map)
+}
