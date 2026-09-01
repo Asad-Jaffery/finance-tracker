@@ -1,0 +1,115 @@
+{
+  "month": "2026-08",
+  "generatedAt": "2026-09-01T00:00:00.000Z",
+  "issuers": ["amex", "chase"],
+  "transactions": [
+    {
+      "date": "2026-07-15",
+      "amount": 12.45,
+      "rawMerchant": "CHIPOTLE #1823 SF",
+      "cleanedMerchant": "CHIPOTLE",
+      "issuer": "amex",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-07-18",
+      "amount": 18.4,
+      "rawMerchant": "UBER *TRIP",
+      "cleanedMerchant": "UBER",
+      "issuer": "amex",
+      "kind": "purchase",
+      "category": "Transit"
+    },
+    {
+      "date": "2026-07-20",
+      "amount": 23.17,
+      "rawMerchant": "UBER EATS",
+      "cleanedMerchant": "UBER EATS",
+      "issuer": "amex",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-07-22",
+      "amount": 49.99,
+      "rawMerchant": "24 HOUR FITNESS #123",
+      "cleanedMerchant": "24 HOUR FITNESS",
+      "issuer": "amex",
+      "kind": "purchase",
+      "category": "Subscriptions"
+    },
+    {
+      "date": "2026-07-25",
+      "amount": 6.5,
+      "rawMerchant": "SQ *BLUE BOTTLE COFFEE",
+      "cleanedMerchant": "BLUE BOTTLE COFFEE",
+      "issuer": "amex",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-08-02",
+      "amount": 14.2,
+      "rawMerchant": "CHIPOTLE 0472 OAKLAND",
+      "cleanedMerchant": "CHIPOTLE",
+      "issuer": "amex",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-08-03",
+      "amount": 15.99,
+      "rawMerchant": "NETFLIX",
+      "cleanedMerchant": "NETFLIX",
+      "issuer": "chase",
+      "kind": "purchase",
+      "category": "Subscriptions"
+    },
+    {
+      "date": "2026-08-04",
+      "amount": 48.9,
+      "rawMerchant": "SHELL OIL 12345678",
+      "cleanedMerchant": "SHELL OIL",
+      "issuer": "amex",
+      "kind": "purchase",
+      "category": "Gas"
+    },
+    {
+      "date": "2026-08-05",
+      "amount": 56.99,
+      "rawMerchant": "AMAZON.COM*AMZN.COM/BILL",
+      "cleanedMerchant": "AMAZON.COM",
+      "issuer": "amex",
+      "kind": "purchase",
+      "category": "Shopping"
+    },
+    {
+      "date": "2026-08-06",
+      "amount": -5.4,
+      "rawMerchant": "CHIPOTLE #1823 SF",
+      "cleanedMerchant": "CHIPOTLE",
+      "issuer": "amex",
+      "kind": "refund",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-08-08",
+      "amount": 5.75,
+      "rawMerchant": "STARBUCKS STORE 123",
+      "cleanedMerchant": "STARBUCKS",
+      "issuer": "amex",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-08-10",
+      "amount": 9,
+      "rawMerchant": "UNKNOWN MERCHANT XYZ",
+      "cleanedMerchant": "UNKNOWN MERCHANT XYZ",
+      "issuer": "amex",
+      "kind": "purchase",
+      "category": "Other / uncategorized"
+    }
+  ]
+}
