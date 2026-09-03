@@ -14,6 +14,17 @@ export function formatUsd(amount: number): string {
   }).format(amount)
 }
 
+export function formatMonth(month: string): string {
+  const match = /^(\d{4})-(0[1-9]|1[0-2])$/.exec(month)
+  if (!match) return month
+
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, 1)))
+}
+
 export function columnTotal(transactions: Transaction[]): number {
   return transactions.reduce((sum, tx) => sum + tx.amount, 0)
 }

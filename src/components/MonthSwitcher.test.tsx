@@ -21,6 +21,10 @@ describe('MonthSwitcher', () => {
     expect(select).toHaveProperty('value', '2026-08')
     const options = screen.getAllByRole('option').map((el) => el.getAttribute('value'))
     expect(options).toEqual(['2026-07', '2026-08'])
+    expect(screen.getAllByRole('option').map((el) => el.textContent)).toEqual([
+      'Jul 2026',
+      'Aug 2026',
+    ])
   })
 
   it('notifies onChange with the selected month and does not invent extra months', async () => {

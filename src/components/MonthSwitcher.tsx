@@ -1,3 +1,5 @@
+import { formatMonth } from '../totals.ts'
+
 export function MonthSwitcher({
   months,
   value,
@@ -19,7 +21,7 @@ export function MonthSwitcher({
       >
         {months.map((month) => (
           <option key={month} value={month}>
-            {month}
+            {formatMonth(month)}
           </option>
         ))}
       </select>

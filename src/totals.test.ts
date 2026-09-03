@@ -1,7 +1,13 @@
 // @vitest-environment node
 import { describe, expect, it } from 'vitest'
 import type { Transaction } from './types.ts'
-import { categoryTotals, columnTotal, formatUsd, groupByClosedCategories } from './totals.ts'
+import {
+  categoryTotals,
+  columnTotal,
+  formatMonth,
+  formatUsd,
+  groupByClosedCategories,
+} from './totals.ts'
 
 const CATEGORIES = [
   'Food + coffee',
@@ -37,6 +43,17 @@ describe('formatUsd', () => {
   it('uses a minus sign for negatives, not parentheses-only', () => {
     expect(formatUsd(-5.4)).toBe('-$5.40')
     expect(formatUsd(-12.34)).toBe('-$12.34')
+  })
+})
+
+describe('formatMonth', () => {
+  it('renders valid calendar month IDs as short month names and years', () => {
+    expect(formatMonth('2026-08')).toBe('Aug 2026')
+    expect(formatMonth('2026-01')).toBe('Jan 2026')
+  })
+
+  it('leaves malformed values unchanged', () => {
+    expect(formatMonth('2026-13')).toBe('2026-13')
   })
 })
 

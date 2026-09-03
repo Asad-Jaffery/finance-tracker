@@ -12,6 +12,7 @@ import {
 } from 'recharts'
 import {
   categoryTotals,
+  formatMonth,
   formatSignedDelta,
   formatUsd,
   vsLastMonth,
@@ -147,11 +148,11 @@ export function Dashboard({
               margin={{ top: 8, right: 24, bottom: 8, left: 16 }}
             >
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="month" interval={0} />
+              <XAxis dataKey="month" interval={0} tickFormatter={formatMonth} />
               <YAxis tickFormatter={(value: number) => formatUsd(value)} />
               <Tooltip
                 formatter={(value) => formatUsd(Number(value ?? 0))}
-                labelFormatter={(label) => String(label)}
+                labelFormatter={(label) => formatMonth(String(label))}
               />
               <Line
                 type="linear"
@@ -172,7 +173,7 @@ export function Dashboard({
               data-month={row.month}
               data-total={String(row.total)}
             >
-              {row.month}: {formatUsd(row.total)}
+              {formatMonth(row.month)}: {formatUsd(row.total)}
             </li>
           ))}
         </ul>
