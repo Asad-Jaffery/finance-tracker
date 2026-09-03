@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { applyDefaultDrag, applyOnlyThisCharge, transactionIdentity } from './recategorize.ts'
-import type { MerchantMap, MonthFile } from './types.ts'
+import { applyOnlyThisCharge, transactionIdentity } from './recategorize.ts'
+import type { MonthFile } from './types.ts'
 
 const monthFile: MonthFile = {
   month: '2026-08',
@@ -37,38 +37,13 @@ const monthFile: MonthFile = {
   ],
 }
 
-const merchantMap: MerchantMap = {
-  CHIPOTLE: { category: 'Food + coffee', source: 'llm' },
-  UBER: { category: 'Transit', source: 'llm' },
-}
-
-describe('applyDefaultDrag', () => {
-  it('moves every matching merchant including refunds and sets map source human', () => {
-    const result = applyDefaultDrag(monthFile, merchantMap, 'CHIPOTLE', 'Shopping')
-    const chipotles = result.monthFile.transactions.filter(
-      (tx) => tx.cleanedMerchant === 'CHIPOTLE',
-    )
-    expect(chipotles).toHaveLength(2)
-    expect(chipotles.every((tx) => tx.category === 'Shopping')).toBe(true)
-    expect(result.monthFile.transactions.find((tx) => tx.cleanedMerchant === 'UBER')?.category).toBe(
-      'Transit',
-    )
-    expect(result.merchantMap.CHIPOTLE).toEqual({ category: 'Shopping', source: 'human' })
-    expect(result.merchantMap.UBER).toEqual({ category: 'Transit', source: 'llm' })
-    expect(result.monthFile.generatedAt).not.toBe(monthFile.generatedAt)
-    expect(result.monthFile.issuers).toEqual(['amex', 'chase'])
-    expect(monthFile.transactions[0]?.category).toBe('Food + coffee')
-  })
-})
-
 describe('applyOnlyThisCharge', () => {
-  it('moves one identity and leaves the merchant map untouched', () => {
+  it('moves one identity while leaving same-merchant transactions unchanged', () => {
     const identity = transactionIdentity(monthFile.transactions[0]!)
-    const result = applyOnlyThisCharge(monthFile, merchantMap, identity, 'Groceries')
-    expect(result.monthFile.transactions[0]?.category).toBe('Groceries')
-    expect(result.monthFile.transactions[1]?.category).toBe('Food + coffee')
-    expect(result.merchantMap).toBe(merchantMap)
-    expect(result.merchantMap.CHIPOTLE).toEqual({ category: 'Food + coffee', source: 'llm' })
-    expect(result.monthFile.generatedAt).not.toBe(monthFile.generatedAt)
+    const result = applyOnlyThisCharge(monthFile, identity, 'Groceries')
+    expect(result.transactions[0]?.category).toBe('Groceries')
+    expect(result.transactions[1]?.category).toBe('Food + coffee')
+    expect(result.transactions[2]?.category).toBe('Transit')
+    expect(result.generatedAt).not.toBe(monthFile.generatedAt)
   })
 })

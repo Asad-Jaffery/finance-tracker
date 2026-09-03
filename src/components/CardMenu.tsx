@@ -13,7 +13,7 @@ export function CardMenu({
     <details className="card-menu" data-testid="card-menu">
       <summary className="card-menu-summary">Menu</summary>
       <div className="card-menu-panel">
-        <p className="card-menu-heading">Move only this charge to…</p>
+        <p className="card-menu-heading">Move transaction to…</p>
         <ul className="card-menu-list">
           {others.map((category) => (
             <li key={category}>

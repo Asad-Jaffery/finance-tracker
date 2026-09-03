@@ -83,9 +83,6 @@ function mockFetch() {
         status: 200,
       })
     }
-    if (url === '/api/merchant-map') {
-      return new Response(JSON.stringify({}), { status: 200 })
-    }
     if (url === '/api/months/2026-08') {
       return new Response(JSON.stringify(august), { status: 200 })
     }

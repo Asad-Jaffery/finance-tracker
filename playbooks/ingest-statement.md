@@ -2,7 +2,7 @@
 
 Dropping a statement PDF is the entire prompt. Follow this playbook exactly. Do not ask for the category list, JSON shape, or cleaning rules. Do not read `architecture.md`. Do not start the SPA, Vite, or any `/api/*` endpoint unless the user asked. Do not call recategorize helpers, `applyDrag`, or “only this charge”. Those belong to the review loop in the React app.
 
-**Two loops, one disk.** This ingest loop is: PDF → this playbook → `data/months/YYYY-MM.json` + new keys in `data/merchant-map.json`. The SPA never parses PDFs and has no upload widget. You write JSON files with normal file tools so the board can consume them later. JSON on disk is the source of truth.
+**One loop, one disk.** This ingest loop is: PDF → this playbook → `data/months/YYYY-MM.json`. The SPA never parses PDFs and has no upload widget. You write JSON files with normal file tools so the board can consume them later. JSON on disk is the source of truth.
 
 `pdf-lib` is for the synthetic fixture generator only. Do not add PDF parsers to `src/`. Do not implement ingest inside the app.
 
@@ -13,9 +13,8 @@ Dropping a statement PDF is the entire prompt. Follow this playbook exactly. Do 
 Before extracting or writing anything, read:
 
 1. `data/categories.json`
-2. `data/merchant-map.json`
 
-`data/categories.json` is the **only** allowed category source. If `data/merchant-map.json` is missing, treat it as `{}` and create it when you write new keys. An empty object `{}` is a valid starting point: every merchant is new and gets `source: "llm"`. Do not require a pre-seeded map.
+`data/categories.json` is the **only** allowed category source. Do not rewrite it.
 
 Do not read month files first. Do not categorize from memory. Do not rewrite `data/categories.json`.
 
@@ -45,7 +44,7 @@ Every transaction `category` you write must be one of these nine strings.
 
 Read the PDF. Extract **every** purchase and refund line. Do not summarize, roll up, skip “small” charges, or emit “top merchants only”. Multiple issuers stay as per-transaction `issuer` labels; do not collapse issuers.
 
-`rawMerchant` is the exact PDF descriptor with trim only (do not pre-clean it). `cleanedMerchant` is the uppercase stable map key from the pipeline below.
+`rawMerchant` is the exact PDF descriptor with trim only (do not pre-clean it). `cleanedMerchant` is the uppercase stable merchant label from the pipeline below.
 
 ---
 
@@ -62,7 +61,7 @@ Read the PDF. Extract **every** purchase and refund line. Do not summarize, roll
 
 **Keep** merchant refunds. They are not card-pay credits. Clean the refund descriptor with the same pipeline. Do not turn them into `AUTOPAY` / `REFUND` keys.
 
-**Keep** fees and interest as `kind: "purchase"` with category `Other / uncategorized`, unless an existing map key for that cleaned merchant already says otherwise.
+**Keep** fees and interest as `kind: "purchase"` with category `Other / uncategorized`.
 
 Drop zero-amount lines (`amount == 0`). Never store them.
 
@@ -81,7 +80,7 @@ Drop zero-amount lines (`amount == 0`). Never store them.
 
 ## 6. Merchant cleaning pipeline (deterministic, in this order)
 
-`cleanedMerchant` / map keys are **uppercase ASCII**, never title-case.
+`cleanedMerchant` values are **uppercase ASCII**, never title-case.
 
 1. Trim; uppercase ASCII.
 2. Strip leading `SQ *`, `TST*`, `PAYPAL *`, `PP*`, `SP *`, `APPLE PAY`, `GOOGLE PAY`, `CASH APP*`.
@@ -107,14 +106,9 @@ Lookup against the merchant map is **exact** on `cleanedMerchant`. No fuzzy matc
 
 ---
 
-## 7. Categorize (map first)
+## 7. Categorize every transaction
 
-1. If `cleanedMerchant` already exists in `data/merchant-map.json` (human **or** llm), **use that category**. Do not re-guess. The map wins over the default hints below even when they disagree (example: if the map says `CHIPOTLE` → `Groceries`, label CHIPOTLE `Groceries`, not `Food + coffee`).
-2. Else this is a **new** merchant: guess from the closed list using the default hints, then insert `source: "llm"` for that key only.
-
-Never invent categories. Never overwrite `source: "human"`. Never overwrite an existing `llm` entry either. Ingest must not change existing map entries at all — only add missing keys. Human map entries are append-only from the agent’s point of view. Do not “correct” human mappings. Do not refresh llm categories on every statement.
-
-After a human drag stamps e.g. CHIPOTLE `source: "human"`, a later ingest of a **new** month that contains CHIPOTLE must categorize those rows as the human category and must not rewrite the map entry.
+Categorize each transaction independently from its descriptor and the default hints below. The same cleaned merchant can have different categories in the same or different months, for example Costco groceries and Costco food. Do not use or create merchant-level category mappings.
 
 ### Default mapping hints (new merchants only)
 
@@ -132,32 +126,30 @@ After a human drag stamps e.g. CHIPOTLE `source: "human"`, a later ingest of a *
 
 - Gym → `Subscriptions`. Coffee → `Food + coffee`.
 - Costco / Target / Amazon default **Shopping** unless the descriptor is unambiguously gas (`COSTCO GAS` → `Gas`).
-- New `UBER` → `Transit`. New `UBER EATS` → `Food + coffee`. `UBER ONE` → `Subscriptions`. Keep the keys distinct; do not collapse all Uber* to Transit.
+- `UBER` → `Transit`. `UBER EATS` → `Food + coffee`. `UBER ONE` → `Subscriptions`. Keep the merchant labels distinct; do not collapse all Uber* to Transit.
 
 ---
 
-## 8. Infer the book month
+## 8. Assign each transaction to a calendar month
 
-Infer book month from the PDF. Prefer the statement **closing-date** month. Book month is the statement’s chosen `YYYY-MM`, **not** necessarily every posting date’s calendar month.
+Use each transaction’s **posting date** to determine its calendar `YYYY-MM` month. A statement can span multiple calendar months, so split its kept transactions across the corresponding `data/months/YYYY-MM.json` files.
 
-Transactions can have dates in adjacent calendar months; they still belong to the chosen statement `YYYY-MM` file. Do **not** split one PDF across multiple month files by posting date.
+The statement closing date does not choose the transaction’s storage month. For example, a statement closing in August containing a July 31 purchase and an August 1 purchase updates both `2026-07.json` and `2026-08.json`.
 
-Filename `data/months/YYYY-MM.json` must match field `month`.
-
-If the window is `07/12–08/11` style and **still ambiguous after the closing-date rule**, **ask once** which `YYYY-MM` to use. Do not keep asking. Do not invent a month when still ambiguous. Do **not** ask when the closing-date uniquely selects a month (that non-interactive path is how a golden run should work).
+Filename `data/months/YYYY-MM.json` must match field `month`. If the statement omits a year, infer it from the statement period and closing date. If the year remains ambiguous, ask once before writing.
 
 ---
 
 ## 9. Transaction object (no extra fields)
 
-Each kept line becomes a transaction with **exactly these seven fields** (no `id`, no `locked`, no `source` on the row). Human vs LLM lives only on the merchant map. “Only this charge” is a review-loop concept, not an ingest field.
+Each kept line becomes a transaction with **exactly these seven fields** (no `id`, no `locked`, no `source` on the row). “Only this charge” is a review-loop concept, not an ingest field.
 
 ```ts
 {
   date: string;              // YYYY-MM-DD, posting date preferred
   amount: number;            // dollars, 2-decimal. Purchases > 0, refunds < 0
   rawMerchant: string;       // exact PDF descriptor, trim only
-  cleanedMerchant: string;   // uppercase stable map key
+  cleanedMerchant: string;   // uppercase stable merchant label
   issuer: string;            // free-form short label from PDF: "amex", "chase", ...
   kind: "purchase" | "refund"; // purchase iff amount > 0; refund iff amount < 0
   category: string;          // one of the nine labels
@@ -170,7 +162,7 @@ Identity for merge/dedupe is `date + amount + rawMerchant` (equivalently `date|a
 
 ## 10. Write the month file
 
-Write `data/months/YYYY-MM.json` (not `public/`, not `src/`, not CSV, not per-issuer files like `2026-08-amex.json`). Several cards / PDFs for the same book month merge into **the same** file.
+Write one `data/months/YYYY-MM.json` file for every calendar month represented by the statement’s kept transactions (not `public/`, not `src/`, not CSV, not per-issuer files like `2026-08-amex.json`). Several cards / PDFs for the same month merge into **the same** file.
 
 Do not put writable JSON in `public/`. Do not import month files via `import.meta.glob`. Write files directly with normal file tools. The Vite plugin PUT is for the SPA review loop only; ingest does not require the dev server.
 
@@ -189,7 +181,7 @@ Do not put writable JSON in `public/`. Do not import month files via `import.met
 - `issuers` is unique, sorted, **derived** from `transaction.issuer` values (not independently typed; do not include issuers only present on dropped payments).
 - Sort `transactions`: date ASC, then `rawMerchant` ASC, then `amount` ASC (a refund with the same date/merchant sorts before a purchase if its amount is more negative).
 
-If the file already exists, **merge**: concatenate incoming transactions with existing ones, then dedupe on `date + amount + rawMerchant`. **Existing row wins** on duplicate, so a prior human one-off (“only this charge”) category on that exact row is preserved. Do not overwrite the whole file. Do not let the incoming PDF category replace that one-off. Do not dedupe on `cleanedMerchant` only.
+For every affected month file that already exists, **merge**: concatenate that month’s incoming transactions with its existing ones, then dedupe on `date + amount + rawMerchant`. **Existing row wins** on duplicate, so a prior human one-off (“only this charge”) category on that exact row is preserved. Do not overwrite the whole file. Do not let the incoming PDF category replace that one-off. Do not dedupe on `cleanedMerchant` only.
 
 If every line was a dropped payment, still write a valid file:
 
@@ -206,23 +198,7 @@ Do not skip the write when no purchases remain.
 
 ### Months are independent
 
-Only write the inferred month file plus new merchant-map keys. Do not rewrite other `data/months/*.json`. Recategorizing CHIPOTLE in 2026-08 does not rewrite 2026-07.json; ingest of one statement must not backfill or “normalize” other months. Do not reorder or write `data/categories.json`.
-
----
-
-## 11. Update the merchant map (new keys only)
-
-`data/merchant-map.json` is a top-level object, **no wrapper**:
-
-```ts
-{
-  [cleanedMerchant: string]: { category: string; source: "human" | "llm" }
-}
-```
-
-No `{ merchants: ... }`. Category must be a `categories.json` label. `source` is required.
-
-After categorizing, update the map with **new keys only**. Never clobber `source: "human"`. Never overwrite any existing entry (llm or human). Do not rewrite the entire map from the statement.
+Only write the month files represented by transactions in the supplied statement. Do not rewrite other `data/months/*.json`. Recategorizing a transaction in 2026-08 does not rewrite 2026-07.json; ingest of one statement must not backfill or “normalize” other months. Do not reorder or write `data/categories.json`.
 
 ---
 
@@ -239,15 +215,14 @@ Do not run the SPA as part of ingest unless asked.
 
 ## Checklist (dropping a PDF is enough)
 
-1. Read `data/categories.json` and `data/merchant-map.json` first.
+1. Read `data/categories.json` first.
 2. Extract every purchase and refund. Do not summarize.
 3. Drop card payments (AUTOPAY / PAYMENT THANK YOU / ONLINE PAYMENT / MOBILE PAYMENT / paying-the-card credits / balance-transfer principals). Keep merchant refunds. Keep fees/interest as purchase + Other / uncategorized.
 4. Refunds negative + `kind: "refund"`; purchases positive + `kind: "purchase"`; drop zeros.
 5. Clean merchants with the pipeline in §6 (including every required example).
-6. Map-first categorize; exact `cleanedMerchant` lookup; new keys only as `source: "llm"`.
-7. Never overwrite human (or any existing map key). Never invent categories.
-8. Infer book month from closing date; ask once only if still ambiguous.
-9. Write/merge `data/months/YYYY-MM.json`; dedupe `date+amount+rawMerchant`; existing row wins.
-10. Update merchant-map with new keys only.
-11. Never commit the PDF. Never copy it into `data/`.
-12. Do not run the SPA unless asked.
+6. Categorize each transaction independently from its descriptor, using only the closed category list.
+7. Never invent categories.
+8. Split transactions by posting-date calendar month; ask once only if a year is still ambiguous.
+9. Write/merge every affected `data/months/YYYY-MM.json`; dedupe `date+amount+rawMerchant`; existing row wins.
+10. Never commit the PDF. Never copy it into `data/`.
+11. Do not run the SPA unless asked.

@@ -1,18 +1,24 @@
 import {
   DndContext,
+  DragOverlay,
   KeyboardSensor,
   PointerSensor,
   closestCorners,
   useSensor,
   useSensors,
   type ClientRect,
+  type DragCancelEvent,
   type DragEndEvent,
+  type DragStartEvent,
   type KeyboardCoordinateGetter,
   type UniqueIdentifier,
 } from '@dnd-kit/core'
+import { useState } from 'react'
+import { formatUsd } from '../totals.ts'
 import { groupByClosedCategories } from '../totals.ts'
 import type { Transaction } from '../types.ts'
 import { Column } from './Column.tsx'
+import { transactionIdentity } from '../recategorize.ts'
 
 const keyboardCoordinateGetter: KeyboardCoordinateGetter = (
   event,
@@ -66,41 +72,49 @@ const keyboardCoordinateGetter: KeyboardCoordinateGetter = (
 export function Board({
   categories,
   transactions,
-  onDefaultDrag,
   onOnlyThisCharge,
 }: {
   categories: string[]
   transactions: Transaction[]
-  onDefaultDrag?: (cleanedMerchant: string, toCategory: string) => void
   onOnlyThisCharge?: (identity: string, toCategory: string) => void
 }) {
   const columns = groupByClosedCategories(categories, transactions)
+  const [activeTransaction, setActiveTransaction] = useState<Transaction | null>(null)
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
     useSensor(KeyboardSensor, { coordinateGetter: keyboardCoordinateGetter }),
   )
 
+  function handleDragStart(event: DragStartEvent) {
+    setActiveTransaction(
+      transactions.find((tx) => transactionIdentity(tx) === String(event.active.id)) ?? null,
+    )
+  }
+
+  function handleDragCancel(_event: DragCancelEvent) {
+    setActiveTransaction(null)
+  }
+
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event
+    setActiveTransaction(null)
     if (!over) return
 
     const toCategory = String(over.id)
     if (!categories.includes(toCategory)) return
 
-    const cleanedMerchant = active.data.current?.cleanedMerchant
     const fromCategory = active.data.current?.category
-    if (typeof cleanedMerchant !== 'string' || cleanedMerchant.length === 0) {
-      return
-    }
     if (fromCategory === toCategory) return
 
-    onDefaultDrag?.(cleanedMerchant, toCategory)
+    onOnlyThisCharge?.(String(active.id), toCategory)
   }
 
   return (
     <DndContext
       sensors={sensors}
       collisionDetection={closestCorners}
+      onDragStart={handleDragStart}
+      onDragCancel={handleDragCancel}
       onDragEnd={handleDragEnd}
     >
       <div className="board" data-testid="board">
@@ -114,6 +128,18 @@ export function Board({
           />
         ))}
       </div>
+      <DragOverlay zIndex={10}>
+        {activeTransaction ? (
+          <article className="card card-drag-overlay" aria-hidden="true">
+            <div className="card-top">
+              <h3 className="card-merchant">{activeTransaction.cleanedMerchant}</h3>
+            </div>
+            <p className="card-amount">{formatUsd(activeTransaction.amount)}</p>
+            <p className="card-date">{activeTransaction.date}</p>
+            <span className="card-issuer">{activeTransaction.issuer}</span>
+          </article>
+        ) : null}
+      </DragOverlay>
     </DndContext>
   )
 }

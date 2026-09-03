@@ -1,194 +1,61 @@
 {
   "month": "2026-08",
-  "generatedAt": "2026-08-31T12:00:00.000Z",
-  "issuers": ["amex", "chase"],
+  "generatedAt": "2026-09-03T07:11:55.000Z",
+  "issuers": [
+    "robinhood"
+  ],
   "transactions": [
     {
       "date": "2026-08-01",
-      "amount": 49.99,
-      "rawMerchant": "24 HOUR FITNESS #123",
-      "cleanedMerchant": "24 HOUR FITNESS",
-      "issuer": "chase",
+      "amount": 50,
+      "rawMerchant": "GOLD ANNUAL SUBSCRIPTIO",
+      "cleanedMerchant": "GOLD ANNUAL SUBSCRIPTIO",
+      "issuer": "robinhood",
       "kind": "purchase",
-      "category": "Subscriptions"
+      "category": "Shopping"
     },
     {
       "date": "2026-08-01",
-      "amount": 15.99,
-      "rawMerchant": "NETFLIX.COM",
-      "cleanedMerchant": "NETFLIX",
-      "issuer": "amex",
+      "amount": 10.92,
+      "rawMerchant": "TST* TONY'S PIZZA NAPOLET SAN FRANCISCO CA",
+      "cleanedMerchant": "TONY'S PIZZA NAPOLET",
+      "issuer": "robinhood",
       "kind": "purchase",
-      "category": "Subscriptions"
+      "category": "Food + coffee"
     },
     {
       "date": "2026-08-02",
-      "amount": 12.45,
-      "rawMerchant": "CHIPOTLE #1823 SF",
-      "cleanedMerchant": "CHIPOTLE",
-      "issuer": "amex",
+      "amount": 14.91,
+      "rawMerchant": "REG ISSAQUAH 12 1942 ISSAQUAH WA",
+      "cleanedMerchant": "REG ISSAQUAH 12",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Entertainment"
+    },
+    {
+      "date": "2026-08-02",
+      "amount": 13.71,
+      "rawMerchant": "TST*GARLIC CRUSH ISSAQUA Issaquah WA",
+      "cleanedMerchant": "GARLIC CRUSH ISSAQUA",
+      "issuer": "robinhood",
       "kind": "purchase",
       "category": "Food + coffee"
     },
     {
       "date": "2026-08-03",
-      "amount": 6.5,
-      "rawMerchant": "SQ *BLUE BOTTLE COFFEE",
-      "cleanedMerchant": "BLUE BOTTLE COFFEE",
-      "issuer": "chase",
+      "amount": 2.2,
+      "rawMerchant": "COSTCO WHSE #0110 ISSAQUAH WA",
+      "cleanedMerchant": "COSTCO WHSE",
+      "issuer": "robinhood",
       "kind": "purchase",
       "category": "Food + coffee"
     },
     {
-      "date": "2026-08-04",
-      "amount": 87.32,
-      "rawMerchant": "WHOLE FOODS #102",
-      "cleanedMerchant": "WHOLE FOODS",
-      "issuer": "amex",
-      "kind": "purchase",
-      "category": "Groceries"
-    },
-    {
-      "date": "2026-08-05",
-      "amount": 14.2,
-      "rawMerchant": "CHIPOTLE 0472 OAKLAND",
-      "cleanedMerchant": "CHIPOTLE",
-      "issuer": "chase",
-      "kind": "purchase",
-      "category": "Food + coffee"
-    },
-    {
-      "date": "2026-08-06",
-      "amount": 48.9,
-      "rawMerchant": "SHELL OIL 12345678",
-      "cleanedMerchant": "SHELL OIL",
-      "issuer": "amex",
-      "kind": "purchase",
-      "category": "Gas"
-    },
-    {
-      "date": "2026-08-07",
-      "amount": 18.4,
-      "rawMerchant": "UBER *TRIP",
-      "cleanedMerchant": "UBER",
-      "issuer": "chase",
-      "kind": "purchase",
-      "category": "Transit"
-    },
-    {
-      "date": "2026-08-08",
-      "amount": 23.17,
-      "rawMerchant": "UBER EATS",
-      "cleanedMerchant": "UBER EATS",
-      "issuer": "chase",
-      "kind": "purchase",
-      "category": "Food + coffee"
-    },
-    {
-      "date": "2026-08-09",
-      "amount": 312.6,
-      "rawMerchant": "UNITED AIRLINES",
-      "cleanedMerchant": "UNITED AIRLINES",
-      "issuer": "amex",
-      "kind": "purchase",
-      "category": "Travel"
-    },
-    {
-      "date": "2026-08-10",
-      "amount": 56.99,
-      "rawMerchant": "AMAZON.COM*AMZN.COM/BILL",
-      "cleanedMerchant": "AMAZON.COM",
-      "issuer": "chase",
-      "kind": "purchase",
-      "category": "Shopping"
-    },
-    {
-      "date": "2026-08-11",
-      "amount": 14.25,
-      "rawMerchant": "LYFT *RIDE",
-      "cleanedMerchant": "LYFT",
-      "issuer": "amex",
-      "kind": "purchase",
-      "category": "Transit"
-    },
-    {
-      "date": "2026-08-12",
-      "amount": 11.8,
-      "rawMerchant": "CHIPOTLE #1823 SF",
-      "cleanedMerchant": "CHIPOTLE",
-      "issuer": "amex",
-      "kind": "purchase",
-      "category": "Food + coffee"
-    },
-    {
-      "date": "2026-08-13",
-      "amount": -5.4,
-      "rawMerchant": "CHIPOTLE #1823 SF",
-      "cleanedMerchant": "CHIPOTLE",
-      "issuer": "amex",
-      "kind": "refund",
-      "category": "Food + coffee"
-    },
-    {
-      "date": "2026-08-14",
-      "amount": 11.99,
-      "rawMerchant": "SPOTIFY",
-      "cleanedMerchant": "SPOTIFY",
-      "issuer": "chase",
-      "kind": "purchase",
-      "category": "Subscriptions"
-    },
-    {
-      "date": "2026-08-15",
-      "amount": 42.18,
-      "rawMerchant": "TRADER JOE'S",
-      "cleanedMerchant": "TRADER JOE'S",
-      "issuer": "chase",
-      "kind": "purchase",
-      "category": "Groceries"
-    },
-    {
-      "date": "2026-08-16",
-      "amount": 34.12,
-      "rawMerchant": "TARGET T-1823",
-      "cleanedMerchant": "TARGET",
-      "issuer": "amex",
-      "kind": "purchase",
-      "category": "Shopping"
-    },
-    {
-      "date": "2026-08-17",
-      "amount": 189.0,
-      "rawMerchant": "AIRBNB *HOMES",
-      "cleanedMerchant": "AIRBNB",
-      "issuer": "amex",
-      "kind": "purchase",
-      "category": "Travel"
-    },
-    {
-      "date": "2026-08-18",
-      "amount": 28.0,
-      "rawMerchant": "AMC THEATRES",
-      "cleanedMerchant": "AMC THEATRES",
-      "issuer": "chase",
-      "kind": "purchase",
-      "category": "Entertainment"
-    },
-    {
-      "date": "2026-08-20",
-      "amount": 3.5,
-      "rawMerchant": "ATM FEE 1234",
-      "cleanedMerchant": "ATM FEE",
-      "issuer": "amex",
-      "kind": "purchase",
-      "category": "Other / uncategorized"
-    },
-    {
-      "date": "2026-08-22",
-      "amount": 9.0,
-      "rawMerchant": "UNKNOWN MERCHANT XYZ",
-      "cleanedMerchant": "UNKNOWN MERCHANT XYZ",
-      "issuer": "chase",
+      "date": "2026-08-03",
+      "amount": 185.98,
+      "rawMerchant": "COSTCO WHSE #0110 ISSAQUAH WA",
+      "cleanedMerchant": "COSTCO WHSE",
+      "issuer": "robinhood",
       "kind": "purchase",
       "category": "Other / uncategorized"
     }

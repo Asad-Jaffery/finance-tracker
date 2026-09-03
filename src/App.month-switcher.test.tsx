@@ -90,9 +90,6 @@ function mockFetch(options?: { delayJulyMs?: number; delayAugustMs?: number }) {
         status: 200,
       })
     }
-    if (url === '/api/merchant-map') {
-      return new Response(JSON.stringify({}), { status: 200 })
-    }
     if (url === '/api/months/2026-07') {
       const delay = options?.delayJulyMs ?? 0
       if (delay) await new Promise((resolve) => setTimeout(resolve, delay))
@@ -180,7 +177,6 @@ describe('App month switcher', () => {
     }))
     expect(urls).toEqual(expect.arrayContaining([{ url: '/api/months/2026-07', method: 'GET' }]))
     expect(urls.some((call) => call.method === 'PUT')).toBe(false)
-    expect(urls.some((call) => call.url.includes('/api/merchant-map') && call.method === 'PUT')).toBe(false)
   })
 
   it('restores the exclusive August set after switching back', async () => {

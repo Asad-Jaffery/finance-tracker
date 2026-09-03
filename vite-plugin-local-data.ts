@@ -18,7 +18,6 @@ export type LocalDataMiddleware = (
 type Route =
   | { kind: 'months-index' }
   | { kind: 'month'; id: string }
-  | { kind: 'merchant-map' }
   | { kind: 'categories' }
   | { kind: 'invalid' }
 
@@ -94,7 +93,7 @@ async function handle(
 }
 
 function writableRoute(route: Exclude<Route, { kind: 'invalid' }>): boolean {
-  return route.kind === 'month' || route.kind === 'merchant-map'
+  return route.kind === 'month'
 }
 
 async function handleGet(
@@ -119,16 +118,6 @@ async function handleGet(
         return
       }
       sendJson(res, 200, body)
-      return
-    }
-    case 'merchant-map': {
-      const filePath = resolveUnderData(dataRoot, 'merchant-map.json')
-      if (!filePath) {
-        sendJson(res, 400, { error: 'bad path' })
-        return
-      }
-      const body = await readJsonFile(filePath)
-      sendJson(res, 200, body === null ? {} : body)
       return
     }
     case 'categories': {
@@ -181,13 +170,6 @@ async function handlePut(
     return
   }
 
-  const filePath = resolveUnderData(dataRoot, 'merchant-map.json')
-  if (!filePath) {
-    sendJson(res, 400, { error: 'bad path' })
-    return
-  }
-  await atomicWriteJson(filePath, parsed.value)
-  sendJson(res, 200, parsed.value)
 }
 
 async function readJsonObjectBody(
@@ -258,7 +240,6 @@ async function atomicWriteJson(filePath: string, value: unknown): Promise<void> 
 
 function matchRoute(pathname: string): Route | null {
   if (pathname === '/api/months') return { kind: 'months-index' }
-  if (pathname === '/api/merchant-map') return { kind: 'merchant-map' }
   if (pathname === '/api/categories') return { kind: 'categories' }
 
   if (pathname.startsWith('/api/months/')) {
@@ -267,7 +248,7 @@ function matchRoute(pathname: string): Route | null {
     return { kind: 'invalid' }
   }
 
-  if (pathname.startsWith('/api/merchant-map/') || pathname.startsWith('/api/categories/')) {
+  if (pathname.startsWith('/api/categories/')) {
     return { kind: 'invalid' }
   }
 

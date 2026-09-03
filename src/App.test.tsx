@@ -11,9 +11,6 @@ beforeEach(() => {
       if (url === '/api/months') {
         return new Response(JSON.stringify({ months: [] }), { status: 200 })
       }
-      if (url === '/api/merchant-map') {
-        return new Response(JSON.stringify({}), { status: 200 })
-      }
       if (url === '/api/categories') {
         return new Response(JSON.stringify({ version: 1, categories: [] }), {
           status: 200,
@@ -38,15 +35,15 @@ describe('App', () => {
     })
   })
 
-  it('fetches months, categories, and merchant map from same-origin /api', async () => {
+  it('fetches months and categories from same-origin /api', async () => {
     render(<App />)
     await waitFor(() => {
       const calls = vi.mocked(globalThis.fetch).mock.calls.map(([url]) => String(url))
       expect(calls).toEqual(expect.arrayContaining([
         '/api/months',
         '/api/categories',
-        '/api/merchant-map',
       ]))
+      expect(calls).not.toContain('/api/merchant-map')
     })
   })
 })

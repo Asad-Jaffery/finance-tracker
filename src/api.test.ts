@@ -2,7 +2,7 @@
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { fetchCategories, fetchMerchantMap, fetchMonth, fetchMonths } from './api.ts'
+import { fetchCategories, fetchMonth, fetchMonths } from './api.ts'
 
 afterEach(() => {
   vi.unstubAllGlobals()
@@ -49,12 +49,9 @@ describe('api fetch wrappers', () => {
     await expect(fetchMonth('1999-01')).rejects.toThrow(/404/)
   })
 
-  it('loads merchant map and categories from same-origin /api paths', async () => {
+  it('loads categories from its same-origin /api path', async () => {
     const fetchMock = vi.fn(async (input: RequestInfo | URL) => {
       const url = String(input)
-      if (url === '/api/merchant-map') {
-        return new Response(JSON.stringify({}), { status: 200 })
-      }
       if (url === '/api/categories') {
         return new Response(
           JSON.stringify({ version: 1, categories: ['Food + coffee'] }),
@@ -65,7 +62,6 @@ describe('api fetch wrappers', () => {
     })
     vi.stubGlobal('fetch', fetchMock)
 
-    await expect(fetchMerchantMap()).resolves.toEqual({})
     await expect(fetchCategories()).resolves.toEqual({
       version: 1,
       categories: ['Food + coffee'],
@@ -78,7 +74,6 @@ describe('api fetch wrappers', () => {
     expect(apiSource).not.toMatch(/from ['"][^'"]*public\//)
     expect(apiSource).toContain("'/api/months'")
     expect(apiSource).toContain('`/api/months/${month}`')
-    expect(apiSource).toContain("'/api/merchant-map'")
     expect(apiSource).toContain("'/api/categories'")
   })
 })
