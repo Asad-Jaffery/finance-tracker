@@ -37,7 +37,7 @@ export function Card({
       data-testid="transaction-card"
       data-identity={identity}
       style={{
-        transform: CSS.Translate.toString(transform),
+        transform: isDragging ? undefined : CSS.Translate.toString(transform),
       }}
       {...listeners}
       {...attributes}

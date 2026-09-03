@@ -65,11 +65,11 @@ describe('committed mock months', () => {
       .filter((name) => name.endsWith('.json'))
       .map((name) => name.slice(0, -'.json'.length))
       .sort()
-    expect(names).toEqual(['2026-07'])
+    expect(names).toEqual(['2026-07', '2026-08'])
   })
 
   it('uses MonthFile shape, closed categories, and sorted transactions', () => {
-    for (const month of ['2026-07'] as const) {
+    for (const month of ['2026-07', '2026-08'] as const) {
       const file = readJson<MonthFile>(`months/${month}.json`)
       expect(file.month).toBe(month)
       expect(file.generatedAt).toMatch(/^\d{4}-\d{2}-\d{2}T.*Z$/)
@@ -103,9 +103,14 @@ describe('committed mock months', () => {
 
   it('includes the Robinhood July statement transactions', () => {
     const july = readJson<MonthFile>('months/2026-07.json')
-    expect(july.transactions).toHaveLength(33)
+    const august = readJson<MonthFile>('months/2026-08.json')
+    expect(july.transactions).toHaveLength(27)
+    expect(august.transactions).toHaveLength(6)
     const julyTotal = july.transactions.reduce((sum, tx) => sum + tx.amount, 0)
-    expect(julyTotal).toBeCloseTo(1010.08, 2)
+    const augustTotal = august.transactions.reduce((sum, tx) => sum + tx.amount, 0)
+    expect(julyTotal).toBeCloseTo(732.36, 2)
+    expect(augustTotal).toBeCloseTo(277.72, 2)
     expect(july.issuers).toEqual(['robinhood'])
+    expect(august.issuers).toEqual(['robinhood'])
   })
 })

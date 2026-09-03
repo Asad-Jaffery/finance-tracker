@@ -1,0 +1,63 @@
+{
+  "month": "2026-08",
+  "generatedAt": "2026-09-03T07:11:55.000Z",
+  "issuers": [
+    "robinhood"
+  ],
+  "transactions": [
+    {
+      "date": "2026-08-01",
+      "amount": 50,
+      "rawMerchant": "GOLD ANNUAL SUBSCRIPTIO",
+      "cleanedMerchant": "GOLD ANNUAL SUBSCRIPTIO",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Shopping"
+    },
+    {
+      "date": "2026-08-01",
+      "amount": 10.92,
+      "rawMerchant": "TST* TONY'S PIZZA NAPOLET SAN FRANCISCO CA",
+      "cleanedMerchant": "TONY'S PIZZA NAPOLET",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-08-02",
+      "amount": 14.91,
+      "rawMerchant": "REG ISSAQUAH 12 1942 ISSAQUAH WA",
+      "cleanedMerchant": "REG ISSAQUAH 12",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Entertainment"
+    },
+    {
+      "date": "2026-08-02",
+      "amount": 13.71,
+      "rawMerchant": "TST*GARLIC CRUSH ISSAQUA Issaquah WA",
+      "cleanedMerchant": "GARLIC CRUSH ISSAQUA",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-08-03",
+      "amount": 2.2,
+      "rawMerchant": "COSTCO WHSE #0110 ISSAQUAH WA",
+      "cleanedMerchant": "COSTCO WHSE",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Food + coffee"
+    },
+    {
+      "date": "2026-08-03",
+      "amount": 185.98,
+      "rawMerchant": "COSTCO WHSE #0110 ISSAQUAH WA",
+      "cleanedMerchant": "COSTCO WHSE",
+      "issuer": "robinhood",
+      "kind": "purchase",
+      "category": "Other / uncategorized"
+    }
+  ]
+}
